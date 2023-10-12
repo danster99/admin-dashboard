@@ -278,6 +278,11 @@ export default function data() {
             {avatars([[team1, "Ryan Tompson"]])}
           </MDBox>
         ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Sibiu
+          </MDTypography>
+        ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
             192.5 RON
