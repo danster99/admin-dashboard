@@ -64,7 +64,7 @@ function Comenzi() {
       <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <MDBox>
           <MDTypography variant="h6" gutterBottom>
-            Comenzi
+            Ultimele Comenzi
           </MDTypography>
           <MDBox display="flex" alignItems="center" lineHeight={0}>
             <Icon
@@ -94,7 +94,7 @@ function Comenzi() {
           showTotalEntries={false}
           isSorted={false}
           noEndBorder
-          entriesPerPage={false}
+          entriesPerPage={{ defaultValue: 10, entries: [5, 10, 15, 20, 25] }}
         />
       </MDBox>
     </Card>

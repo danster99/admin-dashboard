@@ -32,9 +32,8 @@ import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
 import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
-import Projects from "layouts/dashboard/components/Projects";
 import Comenzi from "layouts/dashboard/components/Comenzi";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import Evenimente from "layouts/dashboard/components/Evenimente";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
@@ -45,12 +44,12 @@ function Dashboard() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox py={3}>
+      <DashboardNavbar sx={{ position: "static" }} />
+      <MDBox pt={1}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3} mb={2}>
-            <FormControl sx={{ m: 1, minWidth: 80 }}>
-              <InputLabel id="demo-select-small-label" mb={3}>
+            <FormControl sx={{ m: 1, minWidth: 80, height: 50 }}>
+              <InputLabel id="demo-select-small-label" size="large">
                 Perioada
               </InputLabel>
               <Select
@@ -58,11 +57,33 @@ function Dashboard() {
                 id="demo-simple-select"
                 value={1}
                 label="Age"
+                size="medium"
+                sx={{ height: 30, mt: 1, minWidth: 80 }}
                 // onChange={handleChange}
               >
                 <MenuItem value={1}>Zi</MenuItem>
                 <MenuItem value={2}>Luna</MenuItem>
                 <MenuItem value={3}>An</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 80, height: 50 }}>
+              <InputLabel id="demo-select-small-label" size="large">
+                Locatie
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-simple-select"
+                value={1}
+                label="Age"
+                size="medium"
+                sx={{ height: 30, mt: 1, minWidth: 80 }}
+                // onChange={handleChange}
+              >
+                <MenuItem value={1}>Toate</MenuItem>
+                <MenuItem value={2}>Bucuresti</MenuItem>
+                <MenuItem value={3}>Constanta</MenuItem>
+                <MenuItem value={4}>Sibiu</MenuItem>
+                <MenuItem value={5}>Brasov</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -117,7 +138,7 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Review-uri"
+                title="Click-uri Review"
                 count="+91"
                 percentage={{
                   color: "success",
@@ -164,7 +185,7 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="primary"
-                  title="Review-uri"
+                  title="Click-uri Review"
                   // description="Last Campaign Performance"
                   date="just updated"
                   chart={tasks}
@@ -179,7 +200,7 @@ function Dashboard() {
               <Comenzi />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
+              <Evenimente />
             </Grid>
           </Grid>
         </MDBox>

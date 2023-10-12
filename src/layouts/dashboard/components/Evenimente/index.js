@@ -24,23 +24,24 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import TimelineItem from "examples/Timeline/TimelineItem";
 
-function OrdersOverview() {
+function Evenimente() {
   return (
     <Card sx={{ height: "100%" }}>
-      <MDBox pt={3} px={3}>
+      <MDBox pt={2} px={3}>
         <MDTypography variant="h6" fontWeight="medium">
-          Orders overview
+          Evenimente
         </MDTypography>
         <MDBox mt={0} mb={2}>
           <MDTypography variant="button" color="text" fontWeight="regular">
-            <MDTypography display="inline" variant="body2" verticalAlign="middle">
+            {/* <MDTypography display="inline" variant="body2" verticalAlign="middle">
               <Icon sx={{ color: ({ palette: { success } }) => success.main }}>arrow_upward</Icon>
             </MDTypography>
             &nbsp;
             <MDTypography variant="button" color="text" fontWeight="medium">
               24%
             </MDTypography>{" "}
-            this month
+            fata de anul trecut */}
+            Evenimente Pe Urmatoarea Perioada
           </MDTypography>
         </MDBox>
       </MDBox>
@@ -48,32 +49,32 @@ function OrdersOverview() {
         <TimelineItem
           color="success"
           icon="notifications"
-          title="$2400, Design changes"
-          dateTime="22 DEC 7:20 PM"
+          title="Bucuresti - Vizita manager"
+          dateTime="15 OCT 7:20 PM"
         />
         <TimelineItem
           color="error"
           icon="inventory_2"
-          title="New order #1832412"
-          dateTime="21 DEC 11 PM"
+          title="Sibiu, Brasov - Refacere inventar"
+          dateTime="19 OCT 11:00 PM"
         />
         <TimelineItem
           color="info"
           icon="shopping_cart"
-          title="Server payments for April"
-          dateTime="21 DEC 9:34 PM"
+          title="Toate - Factura utilitati ENEL"
+          dateTime="26 NOI 9:30 AM"
         />
         <TimelineItem
           color="warning"
-          icon="payment"
-          title="New card added for order #4395133"
-          dateTime="20 DEC 2:20 AM"
+          icon="calendar_month_outlined"
+          title="Constanta - Concediu barman Matei"
+          dateTime="30 NOI - 5 DEC"
         />
         <TimelineItem
           color="primary"
-          icon="vpn_key"
-          title="New card added for order #4395133"
-          dateTime="18 DEC 4:54 AM"
+          icon="priority_high_rounded"
+          title="Bucuresti, Sibiu, Brasov - Control SANEPID"
+          dateTime="18 DEC 9:00 AM"
           lastItem
         />
       </MDBox>
@@ -81,4 +82,4 @@ function OrdersOverview() {
   );
 }
 
-export default OrdersOverview;
+export default Evenimente;
