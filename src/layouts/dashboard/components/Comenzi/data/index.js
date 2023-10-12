@@ -85,6 +85,7 @@ export default function data() {
   return {
     columns: [
       { Header: "comanda", accessor: "comanda", width: "10%", align: "left" },
+      { Header: "locatia", accessor: "locatia", align: "left" },
       { Header: "chelneri", accessor: "chelneri", align: "center" },
       { Header: "total", accessor: "total", align: "center" },
       { Header: "timp la masa", accessor: "timp", align: "center" },
@@ -102,6 +103,11 @@ export default function data() {
           <MDBox display="flex" py={1}>
             {avatars([[team1, "Ryan Tompson"]])}
           </MDBox>
+        ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Bucuresti
+          </MDTypography>
         ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
@@ -129,6 +135,11 @@ export default function data() {
             ])}
           </MDBox>
         ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Sibiu
+          </MDTypography>
+        ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
             324.5 RON
@@ -151,6 +162,11 @@ export default function data() {
           <MDBox display="flex" py={1}>
             {avatars([[team4, "Jessica Doe"]])}
           </MDBox>
+        ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Constanta
+          </MDTypography>
         ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
@@ -175,6 +191,11 @@ export default function data() {
             {avatars([[team1, "Ryan Tompson"]])}
           </MDBox>
         ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Brasov
+          </MDTypography>
+        ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
             192.5 RON
@@ -201,6 +222,11 @@ export default function data() {
             ])}
           </MDBox>
         ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Bucuresti
+          </MDTypography>
+        ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
             324.5 RON
@@ -223,6 +249,11 @@ export default function data() {
           <MDBox display="flex" py={1}>
             {avatars([[team4, "Jessica Doe"]])}
           </MDBox>
+        ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Sibiu
+          </MDTypography>
         ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
