@@ -148,7 +148,7 @@ function Tables() {
                     ],
                     rows: [
                       {
-                        name: "Hanny Baniard",
+                        name: "Hanny Baniard schimbare dan",
                         position: "Data Coordiator",
                         office: "Baorixile",
                         age: 42,
