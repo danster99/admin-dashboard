@@ -309,6 +309,11 @@ export default function data() {
             ])}
           </MDBox>
         ),
+        locatia: (
+          <MDTypography variant="caption" color="text" fontWeight="medium">
+            Sibiu
+          </MDTypography>
+        ),
         total: (
           <MDTypography variant="caption" color="text" fontWeight="medium">
             324.5 RON
