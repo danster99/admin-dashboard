@@ -37,7 +37,8 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+import Products from "layouts/produse";
+import Orders from "layouts/comenzi";
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
 import Notifications from "layouts/notifications";
@@ -59,11 +60,19 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Statistici",
-    key: "statistici",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/statistici",
-    component: <Tables />,
+    name: "Comenzi",
+    key: "comenzi",
+    icon: <Icon fontSize="small">edit_note</Icon>,
+    route: "/comenzi",
+    component: <Orders />,
+  },
+  {
+    type: "collapse",
+    name: "Produse",
+    key: "produse",
+    icon: <Icon fontSize="small">inventory</Icon>,
+    route: "/produse",
+    component: <Products />,
   },
   {
     type: "collapse",
