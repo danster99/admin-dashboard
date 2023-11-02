@@ -22,16 +22,54 @@ import Button from "@mui/material/Button";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import MDAvatar from "components/MDAvatar";
+import Tooltip from "@mui/material/Tooltip";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
+import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
+import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
+
+import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
+import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
+
+import data from "layouts/dashboard/components/Comenzi/data";
+import team1 from "assets/images/team-1.jpg";
+import team2 from "assets/images/team-2.jpg";
+import team3 from "assets/images/team-3.jpg";
+import team4 from "assets/images/team-4.jpg";
 
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 function Orders() {
+  const avatars = (members) =>
+    members.map(([image, name]) => (
+      <Tooltip key={name} title={name} placeholder="bottom">
+        <MDAvatar
+          src={image}
+          alt="name"
+          size="xs"
+          sx={{
+            border: ({ borders: { borderWidth }, palette: { white } }) =>
+              `${borderWidth[2]} solid ${white.main}`,
+            cursor: "pointer",
+            position: "relative",
+
+            "&:not(:first-of-type)": {
+              ml: -1.25,
+            },
+
+            "&:hover, &:focus": {
+              zIndex: "10",
+            },
+          }}
+        />
+      </Tooltip>
+    ));
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -78,6 +116,88 @@ function Orders() {
             </FormControl>
           </Grid>
         </Grid>
+        <Grid container spacing={3} mb={3}>
+          <Grid item xs={12} md={6} lg={8}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6} lg={6}>
+                <MDBox mb={4}>
+                  <ComplexStatisticsCard
+                    color="dark"
+                    icon="toc"
+                    title="Nota De Plata Medie"
+                    count="175.32 RON"
+                    percentage={{
+                      color: "success",
+                      amount: "+55%",
+                      label: "than lask week",
+                    }}
+                  />
+                </MDBox>
+              </Grid>
+              <Grid item xs={12} md={6} lg={6}>
+                <MDBox mb={4}>
+                  <ComplexStatisticsCard
+                    icon="leaderboard"
+                    title="Medie Comenzi / Ora"
+                    count="10.5"
+                    percentage={{
+                      color: "success",
+                      amount: "+3%",
+                      label: "than last month",
+                    }}
+                  />
+                </MDBox>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6} lg={6}>
+                <MDBox mb={3}>
+                  <ComplexStatisticsCard
+                    color="success"
+                    icon="store"
+                    title="Medie Timp La Masa"
+                    count="45 min"
+                    percentage={{
+                      color: "success",
+                      amount: "+1%",
+                      label: "than yesterday",
+                    }}
+                  />
+                </MDBox>
+              </Grid>
+              <Grid item xs={12} md={6} lg={6}>
+                <MDBox mb={3}>
+                  <ComplexStatisticsCard
+                    color="primary"
+                    icon="person_add"
+                    title="Procentaj Review"
+                    count="27.5%"
+                    percentage={{
+                      color: "warning",
+                      amount: "-2%",
+                      label: "than last year",
+                    }}
+                  />
+                </MDBox>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <MDBox mb={3}>
+              <ReportsLineChart
+                color="info"
+                title="Nr. Comenzi"
+                // description={
+                //   <>
+                //     (<strong>-15%</strong>) fata de 04.10.2023.
+                //   </>
+                // }
+                date="updated at 10:20"
+                chart={reportsBarChartData}
+              />
+            </MDBox>
+          </Grid>
+        </Grid>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -92,7 +212,7 @@ function Orders() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Produse
+                  Comenzi
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -100,796 +220,266 @@ function Orders() {
                   entriesPerPage={{ defaultValue: 10, entries: [10, 25, 50, 100] }}
                   table={{
                     columns: [
-                      { Header: "Nume", accessor: "name", width: "25%" },
-                      { Header: "Categorie", accessor: "category", width: "30%" },
-                      { Header: "Nr. Comenzi", accessor: "nr_orders" },
-                      { Header: "Profit", accessor: "profit", width: "12%" },
-                      { Header: "action", accessor: "action", align: "center" },
+                      { Header: "ID Comanda", accessor: "id", width: "10%" },
+                      { Header: "Locatia", accessor: "location" },
+                      { Header: "Chelneri", accessor: "waiters" },
+                      { Header: "Total", accessor: "total" },
+                      { Header: "Timp La Masa", accessor: "time" },
+                      { Header: "Review", accessor: "review", width: "10%" },
                     ],
                     rows: [
                       {
-                        name: "Sushi Maki",
-                        category: "SUSHI",
-                        nr_orders: 42,
-                        profit: "42 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 1,
+                        location: "Bucuresti",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team1, "Ryan Tompson"],
+                              [team2, "Romina Hadid"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "200 RON",
+                        time: "45 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Cheesecake",
-                        category: "SWEETS",
-                        nr_orders: 21,
-                        profit: "200 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 2,
+                        location: "Constanta",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([[team3, "Alexa Smith"]])}
+                          </MDBox>
+                        ),
+                        total: "150 RON",
+                        time: "30 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="warning">
+                              close
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Sake Cherry Blossom",
-                        category: "SAKE",
-                        nr_orders: 4,
-                        profit: "100 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 3,
+                        location: "Sibiu",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team4, "John Doe"],
+                              [team1, "Ryan Tompson"],
+                              [team2, "Romina Hadid"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "300 RON",
+                        time: "60 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Tempura Udon",
-                        category: "NOODLES",
-                        nr_orders: 15,
-                        profit: "150 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 4,
+                        location: "Brasov",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team1, "Ryan Tompson"],
+                              [team3, "Mihai Dobre"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "250 RON",
+                        time: "50 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Matcha Latte",
-                        category: "BEVERAGES",
-                        nr_orders: 30,
-                        profit: "80 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 5,
+                        location: "Bucuresti",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team1, "Ryan Tompson"],
+                              [team2, "Romina Hadid"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "200 RON",
+                        time: "45 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Teriyaki Chicken",
-                        category: "MAIN DISH",
-                        nr_orders: 18,
-                        profit: "170 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 6,
+                        location: "Constanta",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([[team3, "Alexa Smith"]])}
+                          </MDBox>
+                        ),
+                        total: "150 RON",
+                        time: "30 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="warning">
+                              close
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Edamame",
-                        category: "APPETIZERS",
-                        nr_orders: 25,
-                        profit: "50 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 7,
+                        location: "Sibiu",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team4, "John Doe"],
+                              [team1, "Ryan Tompson"],
+                              [team2, "Romina Hadid"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "300 RON",
+                        time: "60 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Rainbow Roll",
-                        category: "SUSHI",
-                        nr_orders: 36,
-                        profit: "220 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 8,
+                        location: "Brasov",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team1, "Ryan Tompson"],
+                              [team3, "Mihai Dobre"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "250 RON",
+                        time: "50 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Miso Soup",
-                        category: "SOUPS",
-                        nr_orders: 28,
-                        profit: "40 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 9,
+                        location: "Sibiu",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team4, "John Doe"],
+                              [team1, "Ryan Tompson"],
+                              [team2, "Romina Hadid"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "300 RON",
+                        time: "60 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Green Tea Ice Cream",
-                        category: "DESSERTS",
-                        nr_orders: 14,
-                        profit: "90 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 10,
+                        location: "Brasov",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team1, "Ryan Tompson"],
+                              [team3, "Mihai Dobre"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "250 RON",
+                        time: "50 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "California Roll",
-                        category: "SUSHI",
-                        nr_orders: 48,
-                        profit: "250 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 11,
+                        location: "Bucuresti",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([
+                              [team1, "Ryan Tompson"],
+                              [team2, "Romina Hadid"],
+                            ])}
+                          </MDBox>
+                        ),
+                        total: "200 RON",
+                        time: "45 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="success">
+                              check
+                            </Icon>
                           </MDBox>
                         ),
                       },
                       {
-                        name: "Tiramisu",
-                        category: "DESSERTS",
-                        nr_orders: 17,
-                        profit: "180 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
+                        id: 12,
+                        location: "Constanta",
+                        waiters: (
+                          <MDBox display="flex" py={1}>
+                            {avatars([[team3, "Alexa Smith"]])}
+                          </MDBox>
+                        ),
+                        total: "150 RON",
+                        time: "30 min",
+                        review: (
+                          <MDBox display="flex" alignItems="center">
+                            <Icon fontSize="small" color="warning">
+                              close
+                            </Icon>
                           </MDBox>
                         ),
                       },
-                      {
-                        name: "Chicken Katsu",
-                        category: "MAIN DISH",
-                        nr_orders: 22,
-                        profit: "190 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Vegetable Tempura",
-                        category: "APPETIZERS",
-                        nr_orders: 19,
-                        profit: "120 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Dragon Roll",
-                        category: "SUSHI",
-                        nr_orders: 32,
-                        profit: "280 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Beef Teriyaki",
-                        category: "MAIN DISH",
-                        nr_orders: 26,
-                        profit: "220 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Spicy Tuna Roll",
-                        category: "SUSHI",
-                        nr_orders: 38,
-                        profit: "260 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Seafood Ramen",
-                        category: "NOODLES",
-                        nr_orders: 29,
-                        profit: "210 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Ebi Nigiri",
-                        category: "SUSHI",
-                        nr_orders: 45,
-                        profit: "270 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      {
-                        name: "Sashimi Platter",
-                        category: "SUSHI",
-                        nr_orders: 50,
-                        profit: "300 RON",
-                        action: (
-                          <MDBox>
-                            <Button href="#" sx={{ pr: 0 }} width="30%">
-                              <Icon
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { info } }) => info.main,
-                                }}
-                              >
-                                edit
-                              </Icon>
-                            </Button>
-                            <Button href="#" sx={{ pl: 0 }}>
-                              <Icon
-                                href="#"
-                                sx={{
-                                  fontWeight: "bold",
-                                  color: ({ palette: { error } }) => error.main,
-                                }}
-                              >
-                                delete
-                              </Icon>
-                            </Button>
-                          </MDBox>
-                        ),
-                      },
-                      // Add 20 more entries with similar format
                     ],
                   }}
                 />
               </MDBox>
             </Card>
           </Grid>
-          {/* <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  Projects Table
-                </MDTypography>
-              </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: pColumns, rows: pRows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={true}
-                  noEndBorder
-                />
-              </MDBox>
-            </Card>
-          </Grid>
-          <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  Projects Table
-                </MDTypography>
-              </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  entriesPerPage={{ defaultValue: 25, entries: [5, 10, 15, 20, 25] }}
-                  table={{
-                    columns: [
-                      { Header: "name", accessor: "name", width: "25%" },
-                      { Header: "position", accessor: "position", width: "30%" },
-                      { Header: "office", accessor: "office" },
-                      { Header: "age", accessor: "age", width: "12%" },
-                    ],
-                    rows: [
-                      {
-                        name: "Hanny Baniard schimbare dan",
-                        position: "Data Coordiator",
-                        office: "Baorixile",
-                        age: 42,
-                        startDate: "4/11/2021",
-                        salary: "$474,978",
-                      },
-                      {
-                        name: "Lara Puleque",
-                        position: "Payment Adjustment Coordinator",
-                        office: "Cijangkar",
-                        age: 47,
-                        startDate: "8/2/2021",
-                        salary: "$387,287",
-                      },
-                      {
-                        name: "Torie Repper",
-                        position: "Administrative Officer",
-                        office: "Montpellier",
-                        age: 25,
-                        startDate: "4/21/2021",
-                        salary: "$94,780",
-                      },
-                      {
-                        name: "Nat Gair",
-                        position: "Help Desk Technician",
-                        office: "Imider",
-                        age: 57,
-                        startDate: "12/6/2020",
-                        salary: "$179,177",
-                      },
-                      {
-                        name: "Maggi Slowan",
-                        position: "Help Desk Technician",
-                        office: "Jaunpils",
-                        age: 56,
-                        startDate: "11/7/2020",
-                        salary: "$440,874",
-                      },
-                      {
-                        name: "Marleah Snipe",
-                        position: "Account Representative II",
-                        office: "Orekhovo-Borisovo Severnoye",
-                        age: 31,
-                        startDate: "7/18/2021",
-                        salary: "$404,983",
-                      },
-                      {
-                        name: "Georgia Danbury",
-                        position: "Professor",
-                        office: "Gniezno",
-                        age: 50,
-                        startDate: "10/1/2020",
-                        salary: "$346,576",
-                      },
-                      {
-                        name: "Bev Castan",
-                        position: "Design Engineer",
-                        office: "Acharnés",
-                        age: 19,
-                        startDate: "1/14/2021",
-                        salary: "$445,171",
-                      },
-                      {
-                        name: "Reggi Westney",
-                        position: "Financial Advisor",
-                        office: "Piuí",
-                        age: 56,
-                        startDate: "3/21/2021",
-                        salary: "$441,569",
-                      },
-                      {
-                        name: "Bartholomeus Prosh",
-                        position: "Project Manager",
-                        office: "Kelīshād va Sūdarjān",
-                        age: 28,
-                        startDate: "5/27/2021",
-                        salary: "$336,238",
-                      },
-                      {
-                        name: "Sheffy Feehely",
-                        position: "Software Consultant",
-                        office: "Ndibène Dahra",
-                        age: 27,
-                        startDate: "3/23/2021",
-                        salary: "$473,391",
-                      },
-                      {
-                        name: "Euphemia Chastelain",
-                        position: "Engineer IV",
-                        office: "Little Baguio",
-                        age: 63,
-                        startDate: "5/1/2021",
-                        salary: "$339,489",
-                      },
-                    ],
-                  }}
-                />
-              </MDBox>
-            </Card>
-          </Grid> */}
         </Grid>
       </MDBox>
       <Footer />
