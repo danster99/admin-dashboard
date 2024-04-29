@@ -15,7 +15,7 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
@@ -33,8 +33,43 @@ import DataTable from "examples/Tables/DataTable";
 import NestedModal from "components/ModalProdus";
 
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { array } from "prop-types";
 
 function Products() {
+  const [data, setData] = useState([]);
+  const [categories, setCategories] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [item, setItem] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://plate-pal-97cd0667892d.herokuapp.com/api/menu/1/items/"
+        );
+        const jsonData = await response.json();
+        const food = jsonData.food;
+        var items = [];
+        var categ = Object.keys(food);
+        categ.map((category) => {
+          food[category].map((item) => {
+            items.push(item);
+          });
+        });
+        const categResponse = await fetch(
+          "https://plate-pal-97cd0667892d.herokuapp.com/api/menu/1/categories/"
+        );
+        const categories = await categResponse.json();
+        setCategories(categories);
+        setData(items);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleOpenModal = (item) => {
     setIsOpen(true);
     setItem(item);
@@ -43,163 +78,7 @@ function Products() {
     setIsOpen(false);
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [item, setItem] = useState({});
-
-  const data = [
-    {
-      name: "Cheesecake",
-      category: "DESSERTS",
-      nr_orders: 21,
-      price: 50,
-      description: "Delicious cheesecake",
-      profit: "200 RON",
-    },
-    {
-      name: "Sake Cherry Blossom",
-      category: "DRINKS",
-      nr_orders: 4,
-      price: 100,
-      description: "Sake with cherry blossom",
-      profit: "100 RON",
-    },
-    {
-      name: "Tempura Udon",
-      category: "NOODLES",
-      nr_orders: 15,
-      price: 30,
-      description: "Udon with tempura",
-      profit: "150 RON",
-    },
-    {
-      name: "Matcha Latte",
-      category: "DRINKS",
-      nr_orders: 30,
-      price: 40,
-      description: "Matcha latte",
-      profit: "80 RON",
-    },
-    {
-      name: "Teriyaki Chicken",
-      category: "MAIN DISH",
-      nr_orders: 18,
-      price: 30,
-      description: "Chicken teriyaki",
-      profit: "170 RON",
-    },
-    {
-      name: "Edamame",
-      category: "APPETIZERS",
-      nr_orders: 25,
-      price: 20,
-      description: "Edamame",
-      profit: "50 RON",
-    },
-    {
-      name: "Rainbow Roll",
-      category: "SUSHI",
-      nr_orders: 36,
-      price: 50,
-      description: "Rainbow roll",
-      profit: "220 RON",
-    },
-    {
-      name: "Miso Soup",
-      category: "SOUPS",
-      nr_orders: 28,
-      price: 20,
-      description: "Miso soup",
-      profit: "40 RON",
-    },
-    {
-      name: "Green Tea Ice Cream",
-      category: "DESSERTS",
-      nr_orders: 14,
-      price: 30,
-      description: "Green tea ice cream",
-      profit: "90 RON",
-    },
-    {
-      name: "California Roll",
-      category: "SUSHI",
-      nr_orders: 48,
-      price: 40,
-      description: "California roll",
-      profit: "250 RON",
-    },
-    {
-      name: "Tiramisu",
-      category: "DESSERTS",
-      nr_orders: 17,
-      price: 60,
-      description: "Tiramisu",
-      profit: "180 RON",
-    },
-    {
-      name: "Chicken Katsu",
-      category: "MAIN DISH",
-      nr_orders: 22,
-      price: 50,
-      description: "Chicken katsu",
-      profit: "190 RON",
-    },
-    {
-      name: "Vegetable Tempura",
-      category: "APPETIZERS",
-      nr_orders: 19,
-      price: 42,
-      description: "Vegetable tempura",
-      profit: "120 RON",
-    },
-    {
-      name: "Dragon Roll",
-      category: "SUSHI",
-      nr_orders: 32,
-      price: 51,
-      description: "Dragon roll",
-      profit: "280 RON",
-    },
-    {
-      name: "Beef Teriyaki",
-      category: "MAIN DISH",
-      nr_orders: 26,
-      price: 63,
-      description: "Beef teriyaki",
-      profit: "220 RON",
-    },
-    {
-      name: "Spicy Tuna Roll",
-      category: "SUSHI",
-      nr_orders: 38,
-      price: 32,
-      description: "Spicy tuna roll",
-      profit: "260 RON",
-    },
-    {
-      name: "Seafood Ramen",
-      category: "NOODLES",
-      nr_orders: 29,
-      price: 60,
-      description: "Seafood ramen",
-      profit: "210 RON",
-    },
-    {
-      name: "Ebi Nigiri",
-      category: "SUSHI",
-      nr_orders: 45,
-      price: 35,
-      description: "Ebi nigiri",
-      profit: "270 RON",
-    },
-    {
-      name: "Sashimi Platter",
-      category: "SUSHI",
-      nr_orders: 50,
-      price: 20,
-      description: "Sashimi platter",
-      profit: "300 RON",
-    },
-  ];
+  const category = (item) => categories.find((category) => category.id === item.category);
 
   return (
     <DashboardLayout>
@@ -275,7 +154,7 @@ function Products() {
                       { Header: "Profit", accessor: "profit", width: "12%" },
                       { Header: "action", accessor: "action", align: "center" },
                     ],
-                    rows: data.map((item) => row(item, handleOpenModal)),
+                    rows: data.map((item) => row(category(item), item, handleOpenModal)),
                   }}
                 />
               </MDBox>
@@ -283,51 +162,26 @@ function Products() {
           </Grid>
         </Grid>
       </MDBox>
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="child-modal-title"
-        aria-describedby="child-modal-description"
-        slots={{ backdrop: StyledBackdrop }}
-      >
-        <ModalContent sx={[style, { width: "240px" }]}>
-          <h2 id="child-modal-title" className="modal-title">
-            Text in a child modal
-          </h2>
-          <p id="child-modal-description" className="modal-description">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          </p>
-          <ModalButton onClick={handleClose}>Close Child Modal</ModalButton>
-        </ModalContent>
-      </Modal> */}
-      <NestedModal open={isOpen} handleClose={handleCloseModal} item={item} />
+      <NestedModal
+        open={isOpen}
+        handleClose={handleCloseModal}
+        item={item}
+        categories={categories}
+      />
       <Footer />
     </DashboardLayout>
   );
 }
 
-function row(item, handleOpenModal) {
+function row(category, item, handleOpenModal) {
   return {
     name: item.name,
-    category: item.category,
+    category: category.name,
     nr_orders: item.nr_orders,
     profit: item.profit,
     action: (
       <MDBox>
-        <Button
-          href="#"
-          sx={{ pr: 0 }}
-          width="30%"
-          onClick={() =>
-            handleOpenModal({
-              name: item.name,
-              description: item.description,
-              price: item.price,
-              category: item.category,
-              profit: item.profit,
-            })
-          }
-        >
+        <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(item)}>
           <Icon
             sx={{
               fontWeight: "bold",

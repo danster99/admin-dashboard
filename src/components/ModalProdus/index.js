@@ -8,30 +8,52 @@ import { useState } from "react";
 import {
   Button,
   TextField,
-  Select,
   MenuItem,
-  FormControl,
-  InputLabel,
-  FormHelperText,
+  Collapse,
+  InputAdornment,
+  Slider,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
-export default function NestedModal({ open, handleClose, item }) {
+import team1 from "assets/images/team-1.jpg";
+import { Form } from "react-router-dom/dist";
+import { CheckBox } from "@mui/icons-material";
+
+function findCategory(categories, item) {
+  if (!categories) return null;
+  categories.map((category) => {
+    if (category.id === item.category) {
+      return category;
+    }
+  });
+  return null;
+}
+
+export default function NestedModal({ open, handleClose, item, categories }) {
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [price, setPrice] = useState(item.price);
-  const [photo, setPhoto] = useState(item.photo);
-  const [category, setCategory] = useState(item.category);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [photo, setPhoto] = useState(item.b2StorageFile);
+  const [category, setCategory] = useState(findCategory(categories, item));
+  const [alergens, setAlergens] = useState(item.alergens);
+  const [NutriVal, toggleNutriVal] = useState(false);
 
   useEffect(() => {
+    console.log(item);
     setName(item.name);
     setDescription(item.description);
+    setPhoto(item.b2StorageFile);
     setPrice(item.price);
-    setPhoto(item.photo);
-    setCategory(item.category);
+    setCategory(findCategory(categories, item));
+    console.log(photo);
   }, [item]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
+  };
+
+  const handleAlergensChange = (event) => {
+    setAlergens(event.target.value);
   };
 
   const handleDescriptionChange = (event) => {
@@ -43,7 +65,7 @@ export default function NestedModal({ open, handleClose, item }) {
   };
 
   const handlePhotoChange = (event) => {
-    setPreviewUrl(URL.createObjectURL(event.target.files[0]));
+    setPhoto(URL.createObjectURL(event.target.files[0]));
   };
 
   const handleCategoryChange = (event) => {
@@ -55,12 +77,21 @@ export default function NestedModal({ open, handleClose, item }) {
     // Handle form submission logic here
   };
 
-  const categories = ["SUSHI", "MAIN DISH", "DESSERTS", "NOODLES", "APPETIZER", "SOUPS", "DRINKS"];
+  const handleNutriValClick = () => {
+    toggleNutriVal(!NutriVal);
+  };
+
+  function valuetext(value) {
+    if (value === 100) value = 99;
+    console.log(value / 33);
+    return `${value}`;
+  }
 
   NestedModal.propTypes = {
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     item: PropTypes.object.isRequired,
+    categories: PropTypes.object.isRequired,
   };
 
   return (
@@ -73,73 +104,160 @@ export default function NestedModal({ open, handleClose, item }) {
         slots={{ backdrop: StyledBackdrop }}
       >
         <ModalContent sx={style}>
-          <form onSubmit={handleSubmit}>
-            <h2 id="parent-modal-title" className="modal-title">
-              Edit Item
-            </h2>
-            <TextField label="Name" value={name} onChange={handleNameChange} required />
-            <TextField
-              label="Description"
-              value={description}
-              onChange={handleDescriptionChange}
-              required
-              multiline
-              rows={4}
-              inputProps={{ maxLength: 300 }}
-            />
-            <TextField
-              label="Price"
-              value={price}
-              onChange={handlePriceChange}
-              required
-              type="number"
-            />
-            <input
-              accept="image/*"
-              style={{ display: "none" }}
-              id="raised-button-file"
-              multiple
-              type="file"
-              onChange={handlePhotoChange}
-            />
-            <label htmlFor="raised-button-file">
-              <Button variant="raised" component="span">
-                Upload Photo
-              </Button>
-            </label>
-            {previewUrl && (
-              <img
-                src={previewUrl}
-                alt="Preview"
-                style={{ maxHeight: "200px", maxWidth: "200px" }}
+          <h2 id="parent-modal-title" className="modal-title">
+            Edit Item
+          </h2>
+          <form onSubmit={handleSubmit} style={styledForm}>
+            <div style={formFields}>
+              <TextField label="Name" value={name} onChange={handleNameChange} required />
+              <TextField
+                label="Description"
+                value={description}
+                onChange={handleDescriptionChange}
+                required
+                multiline
+                rows={4}
+                inputProps={{ maxLength: 300 }}
               />
-            )}
-            <FormControl required>
-              <InputLabel>Category</InputLabel>
-              <Select value={category} onChange={handleCategoryChange}>
-                {categories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
+              <TextField
+                label="Alergens"
+                value={alergens}
+                onChange={handleAlergensChange}
+                required
+              />
+              <TextField
+                label="Price"
+                value={price}
+                onChange={handlePriceChange}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start" style={{ width: "30px" }}>
+                      <p>RON</p>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              {/* <TextField
+                id="category"
+                select
+                label="Category"
+                defaultValue={categories[0].name}
+                helperText="Please select a category"
+                size="small"
+              >
+                {categories.map((option) => (
+                  <MenuItem key={option.id} value={option.name}>
+                    {option.name}
                   </MenuItem>
                 ))}
-              </Select>
-              <FormHelperText>Select a category</FormHelperText>
-            </FormControl>
-            <ModalButton type="submit">Save</ModalButton>
-            <ModalButton
+              </TextField> */}
+              <p>Spice Level</p>
+              <Slider
+                aria-label="Always visible"
+                defaultValue={0}
+                getAriaValueText={valuetext}
+                step={33}
+                marks={[
+                  { value: 0, label: "0" },
+                  { value: 33, label: "1" },
+                  { value: 66, label: "2" },
+                  { value: 99, label: "3" },
+                ]}
+                valueLabelDisplay="off"
+                style={{ margin: "auto", width: "90%" }}
+              />
+            </div>
+
+            <div style={formFields}>
+              {/* <Collapse in={NutriVal} timeout="auto" unmountOnExit style={formNutriVal}> */}
+              <TextField
+                label="Valoare energetica"
+                value="Val energetica"
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              <TextField
+                label="Grasimi"
+                value="Grasimi"
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              <TextField
+                label="Acizi grasi saturati"
+                value="Acizi grasi saturati"
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              <TextField
+                label="Glucide"
+                value="Glucide"
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              {/* </Collapse> */}
+              <FormControlLabel
+                control={<Checkbox checked={item.isDairyFree} />}
+                label="DairyFree"
+                labelPlacement="end"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={item.isGlutenFree} />}
+                label="GlutenFree"
+                labelPlacement="end"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={item.isVegan} />}
+                label="Vegan"
+                labelPlacement="end"
+              />
+            </div>
+            <div style={formPhoto}>
+              <input
+                accept="image/*"
+                style={{ display: "none" }}
+                id="raised-button-file"
+                multiple
+                type="file"
+                onChange={handlePhotoChange}
+              />
+              <img
+                src={photo}
+                alt="Preview"
+                style={{ width: "100%", aspectRatio: "1/1", objectFit: "contain" }}
+              />
+              <label htmlFor="raised-button-file">
+                <Button component="span">Upload Photo</Button>
+              </label>
+            </div>
+          </form>
+          <div>
+            <Button
+              style={{
+                backgroundColor: "blue",
+                borderBlockColor: "blue",
+                borderColor: "blue",
+                margin: "8px 16px",
+                color: "white",
+              }}
+            >
+              Save
+            </Button>
+            <Button
               onClick={handleClose}
+              type="close"
               style={{
                 backgroundColor: "red",
                 borderBlockColor: "red",
                 borderColor: "red",
-                boxShadow: "darkred",
                 margin: "8px 16px",
                 color: "white",
               }}
             >
               Cancel
-            </ModalButton>
-          </form>
+            </Button>
+          </div>
         </ModalContent>
       </Modal>
     </div>
@@ -195,12 +313,44 @@ const StyledBackdrop = styled(Backdrop)`
   -webkit-tap-highlight-color: transparent;
 `;
 
+const styledForm = {
+  display: "flex",
+  flexDirection: "row",
+  width: "90%",
+  justifyContent: "space-evenly",
+};
+
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "80%",
+  flex: "row",
+  alignItems: "center",
+};
+
+const formFields = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "16px",
+  width: "30%",
+};
+
+const formNutriVal = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "16px",
+  width: "100%",
+  alignItems: "center",
+};
+
+const formPhoto = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "16px",
+  width: "30%",
+  alignItems: "center",
 };
 
 const ModalContent = styled("div")(
