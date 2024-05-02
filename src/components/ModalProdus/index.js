@@ -9,43 +9,121 @@ import {
   Button,
   TextField,
   MenuItem,
-  Collapse,
   InputAdornment,
   Slider,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import team1 from "assets/images/team-1.jpg";
-import { Form } from "react-router-dom/dist";
-import { CheckBox } from "@mui/icons-material";
 
-function findCategory(categories, item) {
-  if (!categories) return null;
-  categories.map((category) => {
-    if (category.id === item.category) {
-      return category;
-    }
-  });
-  return null;
+export function DeleteModal({ open, handleClose, item }) {
+  const handleDelete = () => {
+    fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/item/" + item.id + "/", {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    handleClose();
+  };
+
+  DeleteModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    item: PropTypes.object.isRequired,
+  };
+
+  return (
+    <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+        slots={{ backdrop: StyledBackdrop }}
+      >
+        <ModalContent sx={styleDelete}>
+          <h2 id="parent-modal-title" className="modal-title">
+            Delete Item
+          </h2>
+          <p id="parent-modal-description" className="modal-description">
+            Are you sure you want to delete this item?
+          </p>
+          <div>
+            <Button
+              style={{
+                backgroundColor: "red",
+                borderBlockColor: "red",
+                borderColor: "red",
+                margin: "8px 16px",
+                color: "white",
+              }}
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+            <Button
+              onClick={handleClose}
+              type="close"
+              style={{
+                backgroundColor: "blue",
+                borderBlockColor: "blue",
+                borderColor: "blue",
+                margin: "8px 16px",
+                color: "white",
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </ModalContent>
+      </Modal>
+    </div>
+  );
 }
 
-export default function NestedModal({ open, handleClose, item, categories }) {
-  const [name, setName] = useState(item.name);
-  const [description, setDescription] = useState(item.description);
-  const [price, setPrice] = useState(item.price);
-  const [photo, setPhoto] = useState(item.b2StorageFile);
-  const [category, setCategory] = useState(findCategory(categories, item));
-  const [alergens, setAlergens] = useState(item.alergens);
-  const [NutriVal, toggleNutriVal] = useState(false);
+export function NestedModal({ open, handleClose, item, categories }) {
+  const [name, setName] = useState(item ? item.name : "");
+  const [description, setDescription] = useState(item ? item.description : "");
+  const [price, setPrice] = useState(item ? item.price : "");
+  const [photo, setPhoto] = useState(item ? item.b2StorageFile : "");
+  const [category, setCategory] = useState(item ? item.category.name : "");
+  const [alergens, setAlergens] = useState(item ? item.alergens : "");
+  const [spiceLvl, setSpiceLvl] = useState(item ? item.spiceLvl : 0);
+  const [energy, setEnergy] = useState(item ? item.nutriValues["Valoare energetica"] : "");
+  const [fat, setFat] = useState(item ? item.nutriValues["Grasimi"] : "");
+  const [saturatedFat, setSaturatedFat] = useState(
+    item ? item.nutriValues["Acizi grasi saturati"] : ""
+  );
+  const [carbs, setCarbs] = useState(item ? item.nutriValues["Glucide"] : "");
+  const [sugar, setSugar] = useState(item ? item.nutriValues["Zaharuri"] : "");
+  const [protein, setProtein] = useState(item ? item.nutriValues["Proteine"] : "");
+  const [salt, setSalt] = useState(item ? item.nutriValues["Sare"] : "");
+  const [dairy_free, setDairyFree] = useState(item ? item.isDairyFree : false);
+  const [gluten_free, setGlutenFree] = useState(item ? item.isGlutenFree : false);
+  const [vegan, setVegan] = useState(item ? item.isVegan : false);
 
   useEffect(() => {
-    console.log(item);
+    if (!item) return;
     setName(item.name);
     setDescription(item.description);
     setPhoto(item.b2StorageFile);
     setPrice(item.price);
-    setCategory(findCategory(categories, item));
-    console.log(photo);
+    setCategory(item.category.name);
+    setAlergens(item.alergens);
+    setEnergy(item ? item.nutriValues["Valoare energetica"] : "");
+    setFat(item ? item.nutriValues["Grasimi"] : "");
+    setSaturatedFat(item ? item.nutriValues["Acizi grasi saturati"] : "");
+    setCarbs(item ? item.nutriValues["Glucide"] : "");
+    setSugar(item ? item.nutriValues["Zaharuri"] : "");
+    setProtein(item ? item.nutriValues["Proteine"] : "");
+    setSalt(item ? item.nutriValues["Sare"] : "");
+    setSpiceLvl(item.spiceLvl * 33);
+    setDairyFree(item.isDairyFree);
+    setGlutenFree(item.isGlutenFree);
+    setVegan(item.isVegan);
+    console.log(item);
   }, [item]);
 
   const handleNameChange = (event) => {
@@ -65,11 +143,49 @@ export default function NestedModal({ open, handleClose, item, categories }) {
   };
 
   const handlePhotoChange = (event) => {
-    setPhoto(URL.createObjectURL(event.target.files[0]));
+    setPhoto(event.target.files[0]);
   };
 
   const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
+    categories.map((option) => {
+      if (option.name === event.target.value) {
+        setCategory(option.name);
+      }
+    });
+  };
+
+  const handleSpiceLvlChange = (event) => {
+    let level = valuetext(event.target.value);
+    console.log(level);
+    setSpiceLvl(level);
+  };
+
+  const handleEnergyChange = (event) => {
+    setEnergy(event.target.value);
+  };
+
+  const handleFatChange = (event) => {
+    setFat(event.target.value);
+  };
+
+  const handleSaturatedFatChange = (event) => {
+    setSaturatedFat(event.target.value);
+  };
+
+  const handleCarbsChange = (event) => {
+    setCarbs(event.target.value);
+  };
+
+  const handleSugarChange = (event) => {
+    setSugar(event.target.value);
+  };
+
+  const handleProteinChange = (event) => {
+    setProtein(event.target.value);
+  };
+
+  const handleSaltChange = (event) => {
+    setSalt(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -77,15 +193,85 @@ export default function NestedModal({ open, handleClose, item, categories }) {
     // Handle form submission logic here
   };
 
-  const handleNutriValClick = () => {
-    toggleNutriVal(!NutriVal);
+  const handleDairyFree = () => {
+    setDairyFree(!dairy_free);
+  };
+
+  const handleGlutenFree = (event) => {
+    setGlutenFree(event.target.checked);
+  };
+
+  const handleVegan = (event) => {
+    setVegan(event.target.checked);
   };
 
   function valuetext(value) {
     if (value === 100) value = 99;
-    console.log(value / 33);
     return `${value}`;
   }
+
+  const handleSave = () => {
+    let obj = {};
+    if (item) {
+      obj.id = item.id;
+    }
+    obj.category = categories.find((cat) => cat.name === category).id;
+    obj.name = name;
+    obj.description = description;
+    obj.price = price;
+    if (typeof photo != "string") {
+      obj.b2StorageFile = new File([photo], photo.name, { type: photo.type });
+    }
+    obj.alergens = alergens;
+    obj.spiceLvl = spiceLvl / 33;
+    let nv = {
+      "Valoare energetica": energy,
+      Grasimi: fat,
+      "Acizi grasi saturati": saturatedFat,
+      Glucide: carbs,
+      Zaharuri: sugar,
+      Proteine: protein,
+      Sare: salt,
+    };
+    obj.nutriValues = JSON.stringify(nv);
+    obj.isDairyFree = dairy_free;
+    obj.isGlutenFree = gluten_free;
+    obj.isVegan = vegan;
+
+    const formData = new FormData();
+    for (const key in obj) {
+      formData.append(key, obj[key]);
+    }
+
+    try {
+      if (item) {
+        fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/item/" + item.id + "/", {
+          method: "PUT",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else {
+        fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/item/", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+    // Save the changes
+    handleClose();
+  };
 
   NestedModal.propTypes = {
     open: PropTypes.bool.isRequired,
@@ -116,7 +302,7 @@ export default function NestedModal({ open, handleClose, item, categories }) {
                 onChange={handleDescriptionChange}
                 required
                 multiline
-                rows={4}
+                rows={10}
                 inputProps={{ maxLength: 300 }}
               />
               <TextField
@@ -139,11 +325,12 @@ export default function NestedModal({ open, handleClose, item, categories }) {
                 }}
               />
 
-              {/* <TextField
+              <TextField
                 id="category"
                 select
                 label="Category"
-                defaultValue={categories[0].name}
+                defaultValue={category}
+                onChange={handleCategoryChange}
                 helperText="Please select a category"
                 size="small"
               >
@@ -152,11 +339,12 @@ export default function NestedModal({ open, handleClose, item, categories }) {
                     {option.name}
                   </MenuItem>
                 ))}
-              </TextField> */}
+              </TextField>
               <p>Spice Level</p>
               <Slider
                 aria-label="Always visible"
-                defaultValue={0}
+                value={spiceLvl}
+                onChange={handleSpiceLvlChange}
                 getAriaValueText={valuetext}
                 step={33}
                 marks={[
@@ -174,41 +362,70 @@ export default function NestedModal({ open, handleClose, item, categories }) {
               {/* <Collapse in={NutriVal} timeout="auto" unmountOnExit style={formNutriVal}> */}
               <TextField
                 label="Valoare energetica"
-                value="Val energetica"
+                onChange={handleEnergyChange}
+                value={energy}
                 required
                 style={{ width: "100%", marginBottom: "8px" }}
               />
               <TextField
                 label="Grasimi"
-                value="Grasimi"
+                onChange={handleFatChange}
+                value={fat}
                 required
                 style={{ width: "100%", marginBottom: "8px" }}
               />
               <TextField
                 label="Acizi grasi saturati"
-                value="Acizi grasi saturati"
+                onChange={handleSaturatedFatChange}
+                value={saturatedFat}
                 required
                 style={{ width: "100%", marginBottom: "8px" }}
               />
               <TextField
                 label="Glucide"
-                value="Glucide"
+                onChange={handleCarbsChange}
+                value={carbs}
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              <TextField
+                label="Zaharuri"
+                onChange={handleSugarChange}
+                value={sugar}
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              <TextField
+                label="Proteine"
+                onChange={handleProteinChange}
+                value={protein}
+                required
+                style={{ width: "100%", marginBottom: "8px" }}
+              />
+              <TextField
+                label="Sare"
+                onChange={handleSaltChange}
+                value={salt}
                 required
                 style={{ width: "100%", marginBottom: "8px" }}
               />
               {/* </Collapse> */}
               <FormControlLabel
-                control={<Checkbox checked={item.isDairyFree} />}
+                control={<Checkbox checked={dairy_free} onChange={handleDairyFree} />}
                 label="DairyFree"
                 labelPlacement="end"
+                value={dairy_free}
+                onChange={handleDairyFree}
               />
               <FormControlLabel
-                control={<Checkbox checked={item.isGlutenFree} />}
+                control={<Checkbox checked={gluten_free} onChange={handleGlutenFree} />}
                 label="GlutenFree"
                 labelPlacement="end"
+                value={gluten_free}
+                onChange={handleGlutenFree}
               />
               <FormControlLabel
-                control={<Checkbox checked={item.isVegan} />}
+                control={<Checkbox checked={vegan} onChange={handleVegan} />}
                 label="Vegan"
                 labelPlacement="end"
               />
@@ -223,7 +440,13 @@ export default function NestedModal({ open, handleClose, item, categories }) {
                 onChange={handlePhotoChange}
               />
               <img
-                src={photo}
+                src={
+                  photo
+                    ? typeof photo === "string"
+                      ? photo
+                      : URL.createObjectURL(photo)
+                    : "https://via.placeholder.com/512"
+                }
                 alt="Preview"
                 style={{ width: "100%", aspectRatio: "1/1", objectFit: "contain" }}
               />
@@ -241,6 +464,7 @@ export default function NestedModal({ open, handleClose, item, categories }) {
                 margin: "8px 16px",
                 color: "white",
               }}
+              onClick={handleSave}
             >
               Save
             </Button>
@@ -326,6 +550,16 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "80%",
+  flex: "row",
+  alignItems: "center",
+};
+
+const styleDelete = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "30%",
   flex: "row",
   alignItems: "center",
 };
