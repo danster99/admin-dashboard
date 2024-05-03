@@ -105,6 +105,7 @@ export default function App() {
         if (data.error) {
           console.log(data.error);
         } else {
+          console.log(data);
           if (data.username) setCookie("user", data, { path: "/" });
           else setCookie("user", "", { path: "/" });
         }
