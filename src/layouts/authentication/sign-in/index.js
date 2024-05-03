@@ -60,7 +60,6 @@ function Basic() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken"),
       },
       credentials: "include",
       body: JSON.stringify({ email, password }), // Add parentheses and curly braces
