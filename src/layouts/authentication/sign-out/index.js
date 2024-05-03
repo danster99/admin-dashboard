@@ -12,6 +12,7 @@ export default function SignOut() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
       },
       credentials: "include",
     });
