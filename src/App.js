@@ -101,11 +101,12 @@ export default function App() {
           navigate("/authentication/sign-in");
           throw new Error("No User!");
         }
+        console.log("res" + res);
         data = res.json();
         if (data.error) {
-          console.log(data.error);
+          console.log("dataError" + data.error);
         } else {
-          console.log(data);
+          console.log("data" + data);
           if (data.username) setCookie("user", data, { path: "/" });
           else setCookie("user", "", { path: "/" });
         }
