@@ -62,7 +62,6 @@ function Basic() {
         "Content-Type": "application/json",
         "X-CSRFToken": getCookie("csrftoken"),
       },
-      cors: "cors",
       credentials: "include",
       body: JSON.stringify({ email, password }), // Add parentheses and curly braces
     })
