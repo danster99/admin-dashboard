@@ -54,13 +54,9 @@ function Products() {
 
   const refreshData = async () => {
     try {
-      const categResponse = await fetch(
-        "https://backend.platepal.eu/api/menu/1/categories/"
-      );
+      const categResponse = await fetch("https://backend.platepal.eu/api/menu/1/categories/");
       const categories = await categResponse.json();
-      const response = await fetch(
-        "https://backend.platepal.eu/api/menu/1/items/"
-      );
+      const response = await fetch("https://backend.platepal.eu/api/menu/1/items/");
       const jsonData = await response.json();
       const food = jsonData.food;
       var items = [];
