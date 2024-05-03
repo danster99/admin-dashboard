@@ -56,7 +56,7 @@ function Basic() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let response = await fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/user/login/", {
+    let response = await fetch("https://backend.platepal.eu/api/user/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -8,7 +8,7 @@ export default function SignOut() {
   const [cookies, setCookie] = useCookies(["user"]);
 
   const logoutUser = async () => {
-    await fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/user/logout/", {
+    await fetch("https://backend.platepal.eu/api/user/logout/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

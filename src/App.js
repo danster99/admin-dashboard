@@ -66,7 +66,7 @@ function checkUser() {
     if (user !== "") {
       const decodedUser = decodeURIComponent(user);
       return JSON.parse(decodedUser);
-    } else return Navigate("/authentication/sign-in");
+    } else Navigate("/authentication/sign-in");
   }
   return null;
 }
@@ -91,7 +91,7 @@ export default function App() {
 
   const getUser = async () => {
     try {
-      await fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/user/me/", {
+      let response = await fetch("https://backend.platepal.eu/api/user/me/", {
         method: "GET",
         credentials: "include",
       }).then((res) => {

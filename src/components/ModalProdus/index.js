@@ -17,7 +17,7 @@ import {
 
 export function DeleteModal({ open, handleClose, item }) {
   const handleDelete = () => {
-    fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/item/" + item.id + "/", {
+    fetch("https://backend.platepal.eu/api/item/" + item.id + "/", {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -242,7 +242,7 @@ export function NestedModal({ open, handleClose, item, categories }) {
 
     try {
       if (item) {
-        fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/item/" + item.id + "/", {
+        fetch("https://backend.platepal.eu/api/item/" + item.id + "/", {
           method: "PUT",
           body: formData,
         })
@@ -251,7 +251,7 @@ export function NestedModal({ open, handleClose, item, categories }) {
             console.error("Error:", error);
           });
       } else {
-        fetch("https://plate-pal-97cd0667892d.herokuapp.com/api/item/", {
+        fetch("https://backend.platepal.eu/api/item/", {
           method: "POST",
           body: formData,
         })
