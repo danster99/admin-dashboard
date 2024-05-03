@@ -21,7 +21,6 @@ export function DeleteModal({ open, handleClose, item }) {
       method: "DELETE",
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
       .catch((error) => {
         console.error("Error:", error);
       });
@@ -123,7 +122,6 @@ export function NestedModal({ open, handleClose, item, categories }) {
     setDairyFree(item.isDairyFree);
     setGlutenFree(item.isGlutenFree);
     setVegan(item.isVegan);
-    console.log(item);
   }, [item]);
 
   const handleNameChange = (event) => {
@@ -156,7 +154,6 @@ export function NestedModal({ open, handleClose, item, categories }) {
 
   const handleSpiceLvlChange = (event) => {
     let level = valuetext(event.target.value);
-    console.log(level);
     setSpiceLvl(level);
   };
 
@@ -250,7 +247,6 @@ export function NestedModal({ open, handleClose, item, categories }) {
           body: formData,
         })
           .then((response) => response.json())
-          .then((data) => console.log(data))
           .catch((error) => {
             console.error("Error:", error);
           });
@@ -260,7 +256,6 @@ export function NestedModal({ open, handleClose, item, categories }) {
           body: formData,
         })
           .then((response) => response.json())
-          .then((data) => console.log(data))
           .catch((error) => {
             console.error("Error:", error);
           });
