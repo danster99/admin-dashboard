@@ -92,25 +92,29 @@ export default function App() {
 
   const getUser = async () => {
     try {
-      let response = await fetch("https://backend.platepal.eu/api/user/me/", {
+      const response = await fetch("https://backend.platepal.eu/api/user/me/", {
         method: "GET",
         credentials: "include",
-      }).then((res) => {
-        if (res.status !== 200) {
-          setCookie("user", "", { path: "/" });
-          navigate("/authentication/sign-in");
-          throw new Error("No User!");
-        }
-        console.log("res" + res);
-        data = res.json();
-        if (data.error) {
-          console.log("dataError" + data.error);
-        } else {
-          console.log("data" + data);
-          if (data.username) setCookie("user", data, { path: "/" });
-          else setCookie("user", "", { path: "/" });
-        }
       });
+
+      if (response.status !== 200) {
+        setCookie("user", "", { path: "/" });
+        navigate("/authentication/sign-in");
+        throw new Error("No User!");
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        console.log("dataError" + data.error);
+      } else {
+        console.log("data" + data);
+        if (data.username) {
+          setCookie("user", data, { path: "/" });
+        } else {
+          setCookie("user", "", { path: "/" });
+        }
+      }
     } catch (error) {
       console.log(error);
     }
