@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import { getCookie } from "App";
 import axios from "axios";
 
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -31,6 +29,7 @@ export default function SignOut() {
   //   };
 
   useEffect(() => {
+    console.log("cookie: " + document.cookie);
     axios.post(`${url}/logout/`).then((response) => {
       if (response.status === 200) {
         setCurrentUser(false);
