@@ -64,16 +64,15 @@ function Basic() {
       },
       credentials: "include",
       body: JSON.stringify({ email, password }), // Add parentheses and curly braces
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          setCookie("user", data, { path: "/" });
-          navigate("/produse");
-        }
-      });
+    }).then((res) => {
+      if (res.status === 200) {
+        let data = res.json();
+        setCookie("user", JSON.stringify(data), { path: "/" });
+      } else {
+        console.log(res.headers);
+        throw new Error("Login failed");
+      }
+    });
   };
 
   return (
