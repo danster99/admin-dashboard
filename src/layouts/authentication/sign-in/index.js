@@ -61,19 +61,21 @@ function Basic() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${url}/login/`, {
-        username: username,
-        password: password,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setCurrentUser(true);
-          navigate("/dashboard");
-        } else {
-          alert("Invalid credentials");
-        }
-      });
+    try {
+      axios
+        .post(`${url}/login/`, {
+          username: username,
+          password: password,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setCurrentUser(true);
+            navigate("/dashboard");
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

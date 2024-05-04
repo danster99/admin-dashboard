@@ -6,6 +6,7 @@ import axios from "axios";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
+axios.defaults.withXSRFToken = true;
 axios.defaults.withCredentials = true;
 
 export default function SignOut() {
