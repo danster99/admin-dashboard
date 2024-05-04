@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { styled, css } from "@mui/system";
 import { Modal as BaseModal } from "@mui/base";
 import { useState } from "react";
+import MDBox from "components/MDBox";
 import {
   Button,
   TextField,
@@ -448,44 +449,22 @@ export function NestedModal({ open, handleClose, item, categories }) {
                 alt="Preview"
                 style={{ width: "100%", aspectRatio: "1/1", objectFit: "contain" }}
               />
-              <MDButton
-                htmlFor="raised-button-file"
-                color="primary"
-                sx={{ Height: "50%", bgcolor: "primary" }}
-              >
-                <Typography color={"#fff"} variant="body1">
+              <label htmlFor="raised-button-file">
+                <MDButton color="primary" sx={{ Height: "50%", bgcolor: "primary" }}>
                   Upload Photo
-                </Typography>
-              </MDButton>
+                </MDButton>
+              </label>
             </div>
           </form>
-          <div>
-            <Button
-              style={{
-                backgroundColor: "blue",
-                borderBlockColor: "blue",
-                borderColor: "blue",
-                margin: "8px 16px",
-                color: "white",
-              }}
-              onClick={handleSave}
-            >
+
+          <MDBox display="flex" alignItems="center" width="30%" justifyContent="space-evenly">
+            <MDButton color="primary" onClick={handleSave}>
               Save
-            </Button>
-            <Button
-              onClick={handleClose}
-              type="close"
-              style={{
-                backgroundColor: "red",
-                borderBlockColor: "red",
-                borderColor: "red",
-                margin: "8px 16px",
-                color: "white",
-              }}
-            >
+            </MDButton>
+            <MDButton onClick={handleClose} type="close" color="error">
               Cancel
-            </Button>
-          </div>
+            </MDButton>
+          </MDBox>
         </ModalContent>
       </Modal>
     </div>
