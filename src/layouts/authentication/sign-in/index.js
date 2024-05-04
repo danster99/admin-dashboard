@@ -60,23 +60,21 @@ function Basic() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken"),
+        // "X-CSRFToken": getCookie("csrftoken"),
       },
       credentials: "include",
       body: JSON.stringify({ email, password }), // Add parentheses and curly braces
-    }).then((res) => {
-      if (res.status === 200) {
-        let data = res.json();
-        console.log("sign-in data -" + data);
-        let csrfToken = getCookie("csrftoken");
-        console.log("csrfToken -" + csrfToken);
-        let sessionId = getCookie("sessionid");
-        console.log("sessionId -" + sessionId);
-        setCookie("user", JSON.stringify(data), { path: "/" });
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
       } else {
-        console.log(res.headers);
-        throw new Error("Login failed");
+        throw new Error("Something went wrong");
       }
+    }).then((data) => {
+      setCookie("user", encodeURIComponent(JSON.stringify(data)), { path: "/" });
+      navigate("/dashboard");
+    }).catch((error) => {
+      console.error("There was an error!", error);
     });
   };
 
