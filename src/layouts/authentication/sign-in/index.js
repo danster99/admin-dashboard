@@ -64,18 +64,21 @@ function Basic() {
       },
       credentials: "include",
       body: JSON.stringify({ email, password }), // Add parentheses and curly braces
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Something went wrong");
-      }
-    }).then((data) => {
-      setCookie("user", encodeURIComponent(JSON.stringify(data)), { path: "/" });
-      navigate("/dashboard");
-    }).catch((error) => {
-      console.error("There was an error!", error);
-    });
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .then((data) => {
+        setCookie("user", encodeURIComponent(JSON.stringify(data)), { path: "/" });
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   };
 
   return (
