@@ -26,7 +26,6 @@ export default function SignOut() {
   //   };
 
   useEffect(() => {
-    e.preventDefault();
     axios.post(`${url}/logout/`, {}).then((response) => {
       if (response.status === 200) {
         setCurrentUser(false);

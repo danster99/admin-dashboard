@@ -71,6 +71,9 @@ function Basic() {
           setCurrentUser(true);
           navigate("/dashboard");
         }
+        else {
+          alert("Invalid credentials");
+        }
       });
   };
 
