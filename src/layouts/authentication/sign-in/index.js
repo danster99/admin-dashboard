@@ -40,44 +40,37 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import { useCookies } from "react-cookie";
-import { getCookie } from "App";
+import axios from "axios";
 
 function Basic() {
-  const [cookies, setCookie] = useCookies(["user"]);
+  let currentUser = localStorage.getItem("currentUser");
+  const url = localStorage.getItem("baseURL");
+
+  const setCurrentUser = (value) => {
+    localStorage.setItem("currentUser", value);
+    currentUser = value;
+  };
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-  const handleSetEmail = (e) => setEmail(e.target.value);
+  const handleSetUsername = (e) => setUsername(e.target.value);
   const handleSetPassword = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let response = await fetch("https://backend.platepal.eu/api/user/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // "X-CSRFToken": getCookie("csrftoken"),
-      },
-      credentials: "include",
-      body: JSON.stringify({ email, password }), // Add parentheses and curly braces
-    })
+    axios
+      .post(`${url}/login/`, {
+        username: username,
+        password: password,
+      })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong");
+        if (response.status === 200) {
+          setCurrentUser(true);
+          navigate("/dashboard");
         }
-      })
-      .then((data) => {
-        setCookie("user", encodeURIComponent(JSON.stringify(data)), { path: "/" });
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
       });
   };
 
@@ -119,7 +112,7 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth onChange={handleSetEmail} />
+              <MDInput type="username" label="Username" fullWidth onChange={handleSetUsername} />
             </MDBox>
             <MDBox mb={2}>
               <MDInput type="password" label="Password" fullWidth onChange={handleSetPassword} />
