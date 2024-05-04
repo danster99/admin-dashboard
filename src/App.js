@@ -55,7 +55,7 @@ import brandDark from "assets/images/logo-ct-dark.png";
 import axios from "axios";
 
 axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-Csrfoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
 localStorage.setItem("baseURL", "https://backend.platepal.eu");
