@@ -87,10 +87,12 @@ export default function App() {
       .then(function (res) {
         setCurrentUser(true);
         localStorage.setItem("currentUser", true);
+        console.log("User is logged in");
       })
       .catch(function (error) {
         setCurrentUser(false);
         localStorage.setItem("currentUser", false);
+        console.log("User is logged out");
       });
   }, []);
   // Cache for the rtl
