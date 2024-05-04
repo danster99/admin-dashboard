@@ -18,6 +18,7 @@ import DataTable from "examples/Tables/DataTable";
 import { NestedModal, DeleteModal } from "components/ModalProdus";
 
 import { Typography } from "@mui/material";
+import MDButton from "components/MDButton";
 
 function Products() {
   const [data, setData] = useState([]);
@@ -97,9 +98,9 @@ function Products() {
                 py={3}
                 px={2}
                 variant="gradient"
-                bgColor="info"
+                bgColor="primary"
                 borderRadius="lg"
-                coloredShadow="info"
+                coloredShadow="primary"
               >
                 <MDTypography variant="h6" color="white">
                   Produse
@@ -108,17 +109,17 @@ function Products() {
               <MDBox mt={3} mx={3}>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={6} lg={3}>
-                    <Button
+                    <MDButton
                       href="#"
                       variant="contained"
                       color="primary"
-                      sx={{ width: "100%" }}
+                      sx={{ width: "100%", bgcolor: "primary" }}
                       onClick={handleNewProduct}
                     >
-                      <Typography variant="button" color={"#ffff"}>
+                      <Typography variant="button" color={"#ffff"} fontWeight={"500"}>
                         Adauga produs
                       </Typography>
-                    </Button>
+                    </MDButton>
                   </Grid>
                 </Grid>
               </MDBox>
@@ -210,7 +211,7 @@ function row(item, handleOpenModal, handleDeleteModal) {
           <Icon
             sx={{
               fontWeight: "bold",
-              color: ({ palette: { info } }) => info.main,
+              color: ({ palette: { primary } }) => primary.main,
             }}
           >
             edit

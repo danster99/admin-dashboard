@@ -45,8 +45,8 @@ const colors = {
   },
 
   primary: {
-    main: "#e91e63",
-    focus: "#e91e63",
+    main: "#f5c636",
+    focus: "#f7bb02",
   },
 
   secondary: {
@@ -55,8 +55,8 @@ const colors = {
   },
 
   info: {
-    main: "#1A73E8",
-    focus: "#1662C4",
+    main: "#247fe0",
+    focus: "#0b72e0",
   },
 
   success: {
@@ -98,8 +98,8 @@ const colors = {
 
   gradients: {
     primary: {
-      main: "#EC407A",
-      state: "#D81B60",
+      main: "#f5c636",
+      state: "#f7bb02",
     },
 
     secondary: {
@@ -108,8 +108,8 @@ const colors = {
     },
 
     info: {
-      main: "#49a3f1",
-      state: "#1A73E8",
+      main: "#247fe0",
+      state: "#0262c9",
     },
 
     success: {
@@ -202,7 +202,7 @@ const colors = {
 
   badgeColors: {
     primary: {
-      background: "#f8b3ca",
+      background: "#f5c636",
       text: "#cc084b",
     },
 
@@ -243,7 +243,7 @@ const colors = {
   },
 
   coloredShadows: {
-    primary: "#e91e62",
+    primary: "#e0aa04",
     secondary: "#110e0e",
     info: "#00bbd4",
     success: "#4caf4f",

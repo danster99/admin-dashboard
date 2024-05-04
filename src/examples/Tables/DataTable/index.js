@@ -148,7 +148,13 @@ function DataTable({
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
       {entriesPerPage || canSearch ? (
-        <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+        <MDBox
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          p={3}
+          color="primary"
+        >
           {entriesPerPage && (
             <MDBox display="flex" alignItems="center">
               <Autocomplete
@@ -239,7 +245,7 @@ function DataTable({
         {pageOptions.length > 1 && (
           <MDPagination
             variant={pagination.variant ? pagination.variant : "gradient"}
-            color={pagination.color ? pagination.color : "info"}
+            color={pagination.color ? pagination.color : "primary"}
           >
             {canPreviousPage && (
               <MDPagination item onClick={() => previousPage()}>
@@ -274,7 +280,7 @@ DataTable.defaultProps = {
   entriesPerPage: { defaultValue: 10, entries: [5, 10, 15, 20, 25] },
   canSearch: false,
   showTotalEntries: true,
-  pagination: { variant: "gradient", color: "info" },
+  pagination: { variant: "gradient", color: "primary" },
   isSorted: true,
   noEndBorder: false,
 };
@@ -293,16 +299,7 @@ DataTable.propTypes = {
   table: PropTypes.objectOf(PropTypes.array).isRequired,
   pagination: PropTypes.shape({
     variant: PropTypes.oneOf(["contained", "gradient"]),
-    color: PropTypes.oneOf([
-      "primary",
-      "secondary",
-      "info",
-      "success",
-      "warning",
-      "error",
-      "dark",
-      "light",
-    ]),
+    color: PropTypes.oneOf(["primary"]),
   }),
   isSorted: PropTypes.bool,
   noEndBorder: PropTypes.bool,

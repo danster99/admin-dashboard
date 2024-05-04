@@ -59,9 +59,19 @@ axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
-localStorage.setItem("baseURL", "https://backend.platepal.eu");
+let baseURL = "";
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+  alert(
+    "You are running the app in development mode. Please change the baseURL to the production URL"
+  );
+  baseURL = "http://localhost:8000";
+} else {
+  baseURL = "https://backend.platepal.eu";
+}
+
+localStorage.setItem("baseURL", baseURL);
 const client = axios.create({
-  baseURL: "https://backend.platepal.eu",
+  baseURL: baseURL,
 });
 
 export default function App() {

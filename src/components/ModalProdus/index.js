@@ -13,7 +13,10 @@ import {
   Slider,
   FormControlLabel,
   Checkbox,
+  Typography,
 } from "@mui/material";
+import MDButton from "components/MDButton";
+import { Height } from "@mui/icons-material";
 
 export function DeleteModal({ open, handleClose, item }) {
   const handleDelete = () => {
@@ -445,9 +448,15 @@ export function NestedModal({ open, handleClose, item, categories }) {
                 alt="Preview"
                 style={{ width: "100%", aspectRatio: "1/1", objectFit: "contain" }}
               />
-              <label htmlFor="raised-button-file">
-                <Button component="span">Upload Photo</Button>
-              </label>
+              <MDButton
+                htmlFor="raised-button-file"
+                color="primary"
+                sx={{ Height: "50%", bgcolor: "primary" }}
+              >
+                <Typography color={"#fff"} variant="body1">
+                  Upload Photo
+                </Typography>
+              </MDButton>
             </div>
           </form>
           <div>

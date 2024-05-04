@@ -67,7 +67,7 @@ const MDPagination = forwardRef(
 MDPagination.defaultProps = {
   item: false,
   variant: "gradient",
-  color: "info",
+  color: "primary",
   size: "medium",
   active: false,
 };
