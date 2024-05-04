@@ -70,8 +70,7 @@ function Basic() {
         if (response.status === 200) {
           setCurrentUser(true);
           navigate("/dashboard");
-        }
-        else {
+        } else {
           alert("Invalid credentials");
         }
       });
