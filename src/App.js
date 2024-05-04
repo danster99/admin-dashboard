@@ -88,6 +88,7 @@ export default function App() {
         setCurrentUser(true);
         localStorage.setItem("currentUser", true);
         console.log("User is logged in");
+        navigate("/produse");
       })
       .catch(function (error) {
         setCurrentUser(false);
