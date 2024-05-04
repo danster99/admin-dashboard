@@ -26,7 +26,7 @@ export default function SignOut() {
   //   };
 
   useEffect(() => {
-    axios.post(`${url}/logout/`, {}).then((response) => {
+    axios.post(`${url}/logout/`).then((response) => {
       if (response.status === 200) {
         setCurrentUser(false);
         navigate("/authentication/sign-in");

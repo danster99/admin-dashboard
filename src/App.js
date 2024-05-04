@@ -58,9 +58,9 @@ axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
-localStorage.setItem("baseURL", "https://backend.platepal.eu/");
+localStorage.setItem("baseURL", "https://backend.platepal.eu");
 const client = axios.create({
-  baseURL: "https://backend.platepal.eu/",
+  baseURL: "https://backend.platepal.eu",
 });
 
 export default function App() {
