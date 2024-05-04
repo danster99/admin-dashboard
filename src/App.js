@@ -88,14 +88,17 @@ export default function App() {
         setCurrentUser(true);
         localStorage.setItem("currentUser", true);
         console.log("User is logged in");
-        navigate("/produse");
+        if (pathname === "/authentication/sign-in") {
+          navigate("/produse");
+        }
       })
       .catch(function (error) {
         setCurrentUser(false);
         localStorage.setItem("currentUser", false);
         console.log("User is logged out");
+        navigate("/authentication/sign-in");
       });
-  }, []);
+  }, [pathname]);
   // Cache for the rtl
   useMemo(() => {
     const cacheRtl = createCache({
