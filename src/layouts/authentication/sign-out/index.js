@@ -4,6 +4,10 @@ import { useCookies } from "react-cookie";
 import { getCookie } from "App";
 import axios from "axios";
 
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+axios.defaults.withCredentials = true;
+
 export default function SignOut() {
   let currentUser = localStorage.getItem("currentUser");
   const url = localStorage.getItem("baseURL");
