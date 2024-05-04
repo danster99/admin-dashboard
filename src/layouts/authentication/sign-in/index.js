@@ -67,6 +67,11 @@ function Basic() {
     }).then((res) => {
       if (res.status === 200) {
         let data = res.json();
+        console.log("sign-in data -" + data);
+        let csrfToken = getCookie("csrftoken");
+        console.log("csrfToken -" + csrfToken);
+        let sessionId = getCookie("sessionid");
+        console.log("sessionId -" + sessionId);
         setCookie("user", JSON.stringify(data), { path: "/" });
       } else {
         console.log(res.headers);
