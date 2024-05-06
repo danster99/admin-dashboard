@@ -37,8 +37,8 @@
   },
   "scripts": {
     "local_start": "set PORT=3001 && set GENERATE_SOURCEMAP=false && react-scripts start",
-    "start": "react-scripts --max_old_space_size=512 start",
-    "build": "react-scripts --max_old_space_size=512 build",
+    "start": "react-scripts --max_old_space_size=1024 start",
+    "build": "react-scripts --max_old_space_size=1024 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
