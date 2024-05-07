@@ -45,8 +45,10 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignOut from "layouts/authentication/sign-out";
+import Categories from "layouts/categorii";
 // @mui icons
 import Icon from "@mui/material/Icon";
+import { Visibility } from "@mui/icons-material";
 
 const routes = [
   // {
@@ -65,6 +67,14 @@ const routes = [
   //   route: "/comenzi",
   //   component: <Orders />,
   // },
+  {
+    type: "collapse",
+    name: "Categorii",
+    key: "categories",
+    icon: <Icon fontSize="small">category</Icon>,
+    route: "/categorii",
+    component: <Categories />,
+  },
   {
     type: "collapse",
     name: "Produse",
@@ -106,20 +116,20 @@ const routes = [
   //   component: <Profile />,
   // },
   {
-    type: "title",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
-  {
     type: "collapse",
     name: "Sign Out",
     key: "sign-out",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-out",
     component: <SignOut />,
+  },
+  {
+    type: "title",
+    name: "Sign In",
+    key: "sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/authentication/sign-in",
+    component: <SignIn />,
   },
 ];
 
