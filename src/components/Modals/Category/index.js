@@ -112,7 +112,7 @@ export function CategoryModal({ open, handleClose, category }) {
               value={name}
               onChange={handleNameChange}
               required
-              error={errors.name}
+              error={errors.name ? true : false}
             />
             <FormControlLabel
               control={<Checkbox checked={isFood} onChange={handleIsFoodChange} />}

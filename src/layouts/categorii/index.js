@@ -91,7 +91,7 @@ function Categories() {
                       variant="contained"
                       color="primary"
                       sx={{ width: "100%", bgcolor: "primary" }}
-                      onClick={handleNewCategory}
+                      onClick={isLoading ? null : handleNewCategory}
                     >
                       <Typography variant="button" color={"#ffff"} fontWeight={"500"}>
                         Adauga categorie

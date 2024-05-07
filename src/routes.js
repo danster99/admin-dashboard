@@ -46,6 +46,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignOut from "layouts/authentication/sign-out";
 import Categories from "layouts/categorii";
+import Homepage from "layouts/homepage";
 // @mui icons
 import Icon from "@mui/material/Icon";
 import { Visibility } from "@mui/icons-material";
@@ -69,8 +70,16 @@ const routes = [
   // },
   {
     type: "collapse",
+    name: "Homepage",
+    key: "homepage",
+    icon: <Icon fontSize="small">home</Icon>,
+    route: "/",
+    component: <Homepage />,
+  },
+  {
+    type: "collapse",
     name: "Categorii",
-    key: "categories",
+    key: "categorii",
     icon: <Icon fontSize="small">category</Icon>,
     route: "/categorii",
     component: <Categories />,

@@ -93,14 +93,12 @@ export default function App() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    console.log(Cookies.get());
     localStorage.setItem("csrftoken", Cookies.get("csrftoken"));
     client
       .get("/me/")
       .then(function (res) {
         setCurrentUser(true);
         localStorage.setItem("currentUser", true);
-        console.log("User is logged in");
         if (pathname === "/authentication/sign-in") {
           navigate("/produse");
         }
@@ -108,7 +106,6 @@ export default function App() {
       .catch(function (error) {
         setCurrentUser(false);
         localStorage.setItem("currentUser", false);
-        console.log("User is logged out");
         navigate("/authentication/sign-in");
       });
   }, [pathname]);
@@ -198,7 +195,7 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="Material Dashboard 2"
+              //brandName="Restaurant \nX \nPlatePal"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
@@ -226,8 +223,9 @@ export default function App() {
         <>
           <Sidenav
             color={sidenavColor}
-            brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Material Dashboard 2"
+            //brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+            brand={false}
+            brandName="Restaurant X PlatePal"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}

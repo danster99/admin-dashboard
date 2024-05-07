@@ -29,7 +29,6 @@ export default function SignOut() {
   //   };
 
   useEffect(() => {
-    console.log("cookie: " + document.cookie);
     axios.post(`${url}/logout/`).then((response) => {
       if (response.status === 200) {
         setCurrentUser(false);

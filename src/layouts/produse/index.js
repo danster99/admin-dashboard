@@ -120,7 +120,7 @@ function Products() {
                       variant="contained"
                       color="primary"
                       sx={{ width: "100%", bgcolor: "primary" }}
-                      onClick={handleNewProduct}
+                      onClick={isLoading ? null : handleNewProduct}
                     >
                       <Typography variant="button" color={"#ffff"} fontWeight={"500"}>
                         Adauga produs
