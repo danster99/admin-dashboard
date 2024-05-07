@@ -15,17 +15,21 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
-import { NestedModal, DeleteModal } from "components/ModalProdus";
+import { ProductModal } from "components/Modals/Product";
+import { DeleteModal } from "components/Modals/Delete";
 
 import { Typography } from "@mui/material";
 import MDButton from "components/MDButton";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Products() {
+  const url = localStorage.getItem("baseURL");
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [item, setItem] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     refreshData();
@@ -55,9 +59,9 @@ function Products() {
 
   const refreshData = async () => {
     try {
-      const categResponse = await fetch("https://backend.platepal.eu/api/menu/1/categories/");
+      const categResponse = await fetch(url + "/api/menu/1/categories/");
       const categories = await categResponse.json();
-      const response = await fetch("https://backend.platepal.eu/api/menu/1/items/");
+      const response = await fetch(url + "/api/menu/1/items/");
       const jsonData = await response.json();
       const food = jsonData.food;
       var items = [];
@@ -82,6 +86,8 @@ function Products() {
       setData(items);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,7 +129,7 @@ function Products() {
                   </Grid>
                 </Grid>
               </MDBox>
-              <MDBox pt={3}>
+              <MDBox pt={3} sx={{ justifyContent: "center" }}>
                 <DataTable
                   entriesPerPage={{ defaultValue: 10, entries: [10, 25, 50, 100] }}
                   canSearch={true}
@@ -140,13 +146,18 @@ function Products() {
                     rows: data.map((item) => row(item, handleOpenModal, handleDeleteModal)),
                   }}
                 />
+                {isLoading && (
+                  <div style={{ display: "flex", justifyContent: "center", padding: "30px 5px" }}>
+                    <CircularProgress />
+                  </div>
+                )}
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
       {isOpen && (
-        <NestedModal
+        <ProductModal
           open={isOpen}
           handleClose={handleCloseModal}
           item={item}
@@ -154,7 +165,7 @@ function Products() {
         />
       )}
       {isDeleteOpen && (
-        <DeleteModal open={isDeleteOpen} handleClose={handleCloseModal} item={item} />
+        <DeleteModal open={isDeleteOpen} handleClose={handleCloseModal} item={item} type="item" />
       )}
       <Footer />
     </DashboardLayout>

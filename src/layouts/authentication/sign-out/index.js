@@ -18,7 +18,7 @@ export default function SignOut() {
   };
 
   //   const logoutUser = async () => {
-  //     await fetch("https://backend.platepal.eu/api/user/logout/", {
+  //     await fetch(url + "/api/user/logout/", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",

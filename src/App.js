@@ -94,6 +94,7 @@ export default function App() {
 
   useEffect(() => {
     console.log(Cookies.get());
+    localStorage.setItem("csrftoken", Cookies.get("csrftoken"));
     client
       .get("/me/")
       .then(function (res) {

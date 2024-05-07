@@ -10,15 +10,19 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import { NestedModal, DeleteModal } from "components/ModalProdus";
+import { DeleteModal } from "components/Modals/Delete";
+import { CategoryModal } from "components/Modals/Category";
 import { Typography } from "@mui/material";
 import MDButton from "components/MDButton";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Categories() {
+  const url = localStorage.getItem("baseURL");
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [item, setItem] = useState({});
+  const [category, setCategory] = useState({});
 
   useEffect(() => {
     refreshData();
@@ -26,33 +30,35 @@ function Categories() {
 
   const handleNewCategory = () => {
     setIsOpen(true);
-    setItem(null);
+    setCategory(null);
   };
 
-  const handleOpenModal = (item) => {
+  const handleOpenModal = (category) => {
     setIsOpen(true);
-    setItem(item);
+    setCategory(category);
   };
 
   const handleCloseModal = () => {
     setIsOpen(false);
     setIsDeleteOpen(false);
-    refreshData();
+    setTimeout(() => refreshData(), 200);
   };
 
-  const handleDeleteModal = (item) => {
+  const handleDeleteModal = (category) => {
     setIsDeleteOpen(true);
-    setItem(item);
+    setCategory(category);
     refreshData();
   };
 
   const refreshData = async () => {
     try {
-      const response = await fetch("https://backend.platepal.eu/api/menu/1/categories/");
+      const response = await fetch(url + "/api/menu/1/categories/");
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,33 +106,43 @@ function Categories() {
                   canSearch={true}
                   table={{
                     columns: [
-                      { Header: "Nume", accessor: "name", width: "25%" },
-                      { Header: "Numar de produse", accessor: "totalItems", width: "15%" },
+                      { Header: "Nume", accessor: "name", width: "30%" },
+                      { Header: "Numar de produse", accessor: "totalItems", width: "30%" },
                       { Header: "Este mancare", accessor: "isFood" },
                       { Header: "Action", accessor: "action", align: "center", width: "10%" },
                     ],
-                    rows: data.map((item) => row(item, handleOpenModal, handleDeleteModal)),
+                    rows: data.map((category) => row(category, handleOpenModal, handleDeleteModal)),
                   }}
                 />
+                {isLoading && (
+                  <div style={{ display: "flex", justifyContent: "center", padding: "30px 5px" }}>
+                    <CircularProgress />
+                  </div>
+                )}
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
-      {isOpen && <NestedModal open={isOpen} handleClose={handleCloseModal} item={item} />}
+      {isOpen && <CategoryModal open={isOpen} handleClose={handleCloseModal} category={category} />}
       {isDeleteOpen && (
-        <DeleteModal open={isDeleteOpen} handleClose={handleCloseModal} item={item} />
+        <DeleteModal
+          open={isDeleteOpen}
+          handleClose={handleCloseModal}
+          item={category}
+          type="category"
+        />
       )}
       <Footer />
     </DashboardLayout>
   );
 }
 
-function row(item, handleOpenModal, handleDeleteModal) {
+function row(category, handleOpenModal, handleDeleteModal) {
   return {
-    name: item.name,
-    totalItems: item.totalItems,
-    isFood: item.isFood ? (
+    name: category.name,
+    totalItems: category.totalItems,
+    isFood: category.isFood ? (
       <MDBox display="flex" alignItems="center">
         <Icon fontSize="small" color="success">
           check
@@ -141,7 +157,7 @@ function row(item, handleOpenModal, handleDeleteModal) {
     ),
     action: (
       <MDBox>
-        <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(item)}>
+        <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(category)}>
           <Icon
             sx={{
               fontWeight: "bold",
@@ -151,7 +167,7 @@ function row(item, handleOpenModal, handleDeleteModal) {
             edit
           </Icon>
         </Button>
-        <Button href="#" sx={{ pl: 0 }} onClick={() => handleDeleteModal(item)}>
+        <Button href="#" sx={{ pl: 0 }} onClick={() => handleDeleteModal(category)}>
           <Icon
             href="#"
             sx={{
