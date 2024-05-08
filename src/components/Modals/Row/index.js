@@ -106,9 +106,17 @@ export function RowModal({ open, handleClose, row }) {
         aria-describedby="row-modal-description"
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={styleSmall}>
+        <ModalContent sx={{ ...styleSmall, width: "20%" }}>
           <h2 id="row-modal-title">Row</h2>
-          <form style={styledForm}>
+          <form
+            style={{
+              ...styledForm,
+              flexDirection: "column",
+              justifyContent: "space-evenly",
+              gap: "20px",
+              width: "80%",
+            }}
+          >
             <TextField
               label="Title"
               value={title}
@@ -124,7 +132,13 @@ export function RowModal({ open, handleClose, row }) {
               type="number"
             />
           </form>
-          <MDBox display="flex" alignItems="center" width="70%" justifyContent="space-evenly">
+          <MDBox
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            width="70%"
+            justifyContent="space-evenly"
+          >
             <MDButton color="primary" onClick={handleSave}>
               Save
             </MDButton>

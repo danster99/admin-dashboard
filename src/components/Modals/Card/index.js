@@ -183,12 +183,12 @@ export function CardModal({ open, handleClose, card, rows }) {
         aria-describedby="parent-modal-description"
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={style}>
+        <ModalContent sx={{ ...style, width: "40%" }}>
           <h2 id="parent-modal-title" className="modal-title">
             Edit card
           </h2>
           <form onSubmit={handleSave} style={styledForm}>
-            <div style={formFields}>
+            <div style={{ ...formFields, width: "45%" }}>
               <TextField
                 label="Title"
                 value={title}
@@ -241,6 +241,8 @@ export function CardModal({ open, handleClose, card, rows }) {
                 onChange={handleLinksToChange}
                 required
               />
+            </div>
+            <div style={{ ...formPhoto, width: "45%" }}>
               <input
                 accept="image/*"
                 style={{ display: "none" }}
