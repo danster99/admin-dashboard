@@ -73,7 +73,7 @@ const routes = [
     name: "Homepage",
     key: "homepage",
     icon: <Icon fontSize="small">home</Icon>,
-    route: "/",
+    route: "/homepage",
     component: <Homepage />,
   },
   {

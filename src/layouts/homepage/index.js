@@ -10,10 +10,13 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import { Typography, Checkbox } from "@mui/material";
-import MDButton from "components/MDButton";
+import { Typography, Checkbox, IconButton } from "@mui/material";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import CircularProgress from "@mui/material/CircularProgress";
-import { string } from "prop-types";
+import { capitalize } from "lodash";
+import { RowModal } from "components/Modals/Row";
+import { DeleteModal } from "components/Modals/Delete";
+import { CardModal } from "components/Modals/Card";
 
 function Homepage() {
   const url = localStorage.getItem("baseURL");
@@ -23,6 +26,12 @@ function Homepage() {
   const [isRowsLoading, setIsRowsLoading] = useState(true);
   const [isCardsLoading, setIsCardsLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [isRowsOpen, setIsRowsOpen] = useState(false);
+  const [isCardsOpen, setIsCardsOpen] = useState(false);
+  const [isRowsDeleteOpen, setIsRowsDeleteOpen] = useState(false);
+  const [isCardsDeleteOpen, setIsCardsDeleteOpen] = useState(false);
+  const [row, setRow] = useState({});
+  const [card, setCard] = useState({});
 
   const handleCheckboxChange = (row) => {
     if (selectedRows.includes(row.id)) {
@@ -33,6 +42,48 @@ function Homepage() {
       tempRows.push(row.id);
       setSelectedRows([...tempRows]);
     }
+  };
+
+  const handleCloseRowsModal = () => {
+    setIsRowsOpen(false);
+    setIsRowsDeleteOpen(false);
+    setTimeout(() => refreshData(), 300);
+  };
+
+  const handleOpenRowModal = (row) => {
+    setRow(row);
+    setIsRowsOpen(true);
+  };
+
+  const handleOpenRowDeleteModal = (row) => {
+    setRow(row);
+    setIsRowsDeleteOpen(true);
+  };
+
+  const handleNewRowModal = () => {
+    setRow(null);
+    setIsRowsOpen(true);
+  };
+
+  const handleCloseCardsModal = () => {
+    setIsCardsOpen(false);
+    setIsCardsDeleteOpen(false);
+    setTimeout(() => refreshData(), 300);
+  };
+
+  const handleOpenCardModal = (card) => {
+    setCard(card);
+    setIsCardsOpen(true);
+  };
+
+  const handleOpenCardDeleteModal = (card) => {
+    setCard(card);
+    setIsCardsDeleteOpen(true);
+  };
+
+  const handleNewCardModal = () => {
+    setCard(null);
+    setIsCardsOpen(true);
   };
 
   const refreshData = async () => {
@@ -54,7 +105,6 @@ function Homepage() {
       setIsCardsLoading(false);
       if (selectedRows.length == 0) {
         setFilteredCards(newCards);
-        console.log("populated filtered cards");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -65,7 +115,6 @@ function Homepage() {
   };
 
   useEffect(() => {
-    console.log("Filtered cards: " + cards.filter((card) => [...selectedRows].includes(card.row)));
     if (selectedRows.length > 0) {
       setFilteredCards(cards.filter((card) => [...selectedRows].includes(card.row)));
     } else setFilteredCards(cards);
@@ -74,6 +123,15 @@ function Homepage() {
   useEffect(() => {
     refreshData();
   }, []);
+
+  const tableContainer = {
+    borderRadius: "20px",
+    BorderColor: "black",
+    border: "5px solid grey",
+    margin: "0 0 20px 0",
+    padding: "10px",
+    minHeight: "73svh",
+  };
 
   return (
     <DashboardLayout>
@@ -98,22 +156,43 @@ function Homepage() {
               </MDBox>
               <MDBox
                 pt={3}
-                sx={{ justifyContent: "center", display: "flex", flexDirection: "row" }}
+                sx={{ justifyContent: "space-evenly", display: "flex", flexDirection: "row" }}
               >
-                <div style={{ borderRadius: "2px" }}>
+                <div style={{ ...tableContainer, width: "40%" }}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between", padding: "0 5px" }}
+                  >
+                    <Typography variant="h4" style={{ padding: "10px 0 0 10px" }}>
+                      Rows
+                    </Typography>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      sx={{ padding: "0" }}
+                      color="primary"
+                      onClick={handleNewRowModal}
+                    >
+                      <AddCircleRoundedIcon fontSize="inherit" />
+                    </IconButton>
+                  </div>
                   <DataTable
                     showTotalEntries={false}
                     entriesPerPage={false}
                     canSearch={false}
                     table={{
                       columns: [
-                        { Header: "Selected", accessor: "selected" },
-                        { Header: "Title", accessor: "title" },
+                        { Header: "Select", accessor: "selected" },
+                        { Header: "Title", accessor: "title", width: "35%" },
                         { Header: "Order", accessor: "order" },
                         { Header: "Action", accessor: "action", align: "center" },
                       ],
                       rows: rows.map((row) =>
-                        homepageRow(row, refreshData, refreshData, handleCheckboxChange)
+                        homepageRow(
+                          row,
+                          handleOpenRowModal,
+                          handleOpenRowDeleteModal,
+                          handleCheckboxChange
+                        )
                       ),
                     }}
                   />
@@ -123,7 +202,23 @@ function Homepage() {
                     </div>
                   )}
                 </div>
-                <div>
+                <div style={{ ...tableContainer, width: "55%" }}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between", padding: "0 5px" }}
+                  >
+                    <Typography variant="h4" style={{ padding: "10px 0 0 10px" }}>
+                      Banners
+                    </Typography>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      sx={{ padding: "0" }}
+                      color="primary"
+                      onClick={handleNewCardModal}
+                    >
+                      <AddCircleRoundedIcon fontSize="inherit" />
+                    </IconButton>
+                  </div>
                   <DataTable
                     showTotalEntries={false}
                     entriesPerPage={false}
@@ -131,11 +226,13 @@ function Homepage() {
                     table={{
                       columns: [
                         { Header: "Title", accessor: "title" },
-                        { Header: "Description", accessor: "description" },
+                        { Header: "Size", accessor: "size" },
+                        { Header: "Active", accessor: "active" },
+                        { Header: "Order", accessor: "order" },
                         { Header: "Action", accessor: "action", align: "center" },
                       ],
                       rows: filteredCards.map((card) =>
-                        homepageCard(card, refreshData, refreshData)
+                        homepageCard(card, handleOpenCardModal, handleOpenCardDeleteModal)
                       ),
                     }}
                   />
@@ -150,6 +247,26 @@ function Homepage() {
           </Grid>
         </Grid>
       </MDBox>
+      {isRowsOpen && <RowModal open={isRowsOpen} handleClose={handleCloseRowsModal} row={row} />}
+      {isRowsDeleteOpen && (
+        <DeleteModal
+          open={isRowsDeleteOpen}
+          handleClose={handleCloseRowsModal}
+          item={row}
+          type="homepage-row"
+        />
+      )}
+      {isCardsOpen && (
+        <CardModal open={isCardsOpen} handleClose={handleCloseCardsModal} card={card} rows={rows} />
+      )}
+      {isCardsDeleteOpen && (
+        <DeleteModal
+          open={isCardsDeleteOpen}
+          handleClose={handleCloseCardsModal}
+          item={card}
+          type="homepage-card"
+        />
+      )}
       <Footer />
     </DashboardLayout>
   );
@@ -166,6 +283,7 @@ function homepageRow(item, handleOpenModal, handleDeleteModal, handleCheckboxCha
       />
     ),
     title: item.title,
+    order: item.order,
     action: (
       <MDBox>
         <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(item)}>
@@ -197,8 +315,8 @@ function homepageRow(item, handleOpenModal, handleDeleteModal, handleCheckboxCha
 function homepageCard(item, handleOpenModal, handleDeleteModal) {
   return {
     title: item.title,
-    description: item.description,
-    size: item.size,
+    size: capitalize(item.size),
+    order: item.order,
     active: item.active ? (
       <MDBox display="flex" alignItems="center">
         <Icon fontSize="small" color="success">
