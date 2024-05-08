@@ -104,9 +104,17 @@ export function CategoryModal({ open, handleClose, category }) {
         aria-describedby="category-modal-description"
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={styleSmall}>
+        <ModalContent sx={{ ...styleSmall, width: "20%" }}>
           <h2 id="category-modal-title">Category</h2>
-          <form style={styledForm}>
+          <form
+            style={{
+              ...styledForm,
+              flexDirection: "column",
+              justifyContent: "space-evenly",
+              gap: "20px",
+              width: "80%",
+            }}
+          >
             <TextField
               label="Name"
               value={name}
@@ -119,11 +127,11 @@ export function CategoryModal({ open, handleClose, category }) {
               label="Is Food"
             />
           </form>
-          <MDBox display="flex" alignItems="center" width="70%" justifyContent="space-evenly">
-            <MDButton color="primary" onClick={handleSave}>
+          <MDBox display="flex" alignItems="center" width="15svw" justifyContent="space-evenly">
+            <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
               Save
             </MDButton>
-            <MDButton onClick={handleClose} type="close" color="error">
+            <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel
             </MDButton>
           </MDBox>

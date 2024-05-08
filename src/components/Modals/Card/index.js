@@ -13,6 +13,7 @@ import {
   Slider,
   FormControlLabel,
   Checkbox,
+  CircularProgress,
 } from "@mui/material";
 import MDButton from "components/MDButton";
 import {
@@ -54,11 +55,12 @@ export function CardModal({ open, handleClose, card, rows }) {
   const [active, setActive] = useState(card ? card.active : false);
   const [links_to, setLinksTo] = useState(card ? card.links_to : "");
   const [errors, setErrors] = useState({ title: "", size: "" });
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   useEffect(() => {
     if (!card) return;
     setTitle(card.title);
-    setRow(card.row);
+    setRow(rows.length > 0 ? rows.find((r) => r.id === card.row).title : "");
     setSize(card.size);
     setPhoto(card.b2StorageFile);
     setOrder(card.order);
@@ -105,6 +107,12 @@ export function CardModal({ open, handleClose, card, rows }) {
 
   const handleLinksToChange = (event) => {
     setLinksTo(event.target.value);
+  };
+
+  const handleImageLoad = () => {
+    setTimeout(() => {
+      setIsImageLoading(false);
+    }, 500);
   };
 
   const handleSave = async () => {
@@ -242,7 +250,7 @@ export function CardModal({ open, handleClose, card, rows }) {
                 required
               />
             </div>
-            <div style={{ ...formPhoto, width: "45%" }}>
+            <div style={{ ...formPhoto, width: "45%", height: "100%" }}>
               <input
                 accept="image/*"
                 style={{ display: "none" }}
@@ -251,6 +259,21 @@ export function CardModal({ open, handleClose, card, rows }) {
                 type="file"
                 onChange={handlePhotoChange}
               />
+              {isImageLoading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    display: "flex",
+                    width: "38%",
+                    height: "50%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "rgba(255, 255, 255)",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              )}
               <img
                 src={
                   photo
@@ -260,7 +283,12 @@ export function CardModal({ open, handleClose, card, rows }) {
                     : "https://via.placeholder.com/512"
                 }
                 alt="Preview"
-                style={{ width: "100%", aspectRatio: "1/1", objectFit: "contain" }}
+                style={{
+                  width: "100%",
+                  aspectRatio: "1/1",
+                  objectFit: "contain",
+                }}
+                onLoad={handleImageLoad}
               />
               <label htmlFor="raised-button-file">
                 <Button component="span" color="primary">
@@ -270,11 +298,11 @@ export function CardModal({ open, handleClose, card, rows }) {
             </div>
           </form>
 
-          <MDBox display="flex" aligncards="center" width="30%" justifyContent="space-evenly">
-            <MDButton color="primary" onClick={handleSave}>
+          <MDBox display="flex" aligncards="center" width="15svw" justifyContent="space-evenly">
+            <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
               Save
             </MDButton>
-            <MDButton onClick={handleClose} type="close" color="error">
+            <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel
             </MDButton>
           </MDBox>

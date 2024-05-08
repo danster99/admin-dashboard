@@ -136,13 +136,13 @@ export function RowModal({ open, handleClose, row }) {
             display="flex"
             flexDirection="row"
             alignItems="center"
-            width="70%"
+            width="15svw"
             justifyContent="space-evenly"
           >
-            <MDButton color="primary" onClick={handleSave}>
+            <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
               Save
             </MDButton>
-            <MDButton onClick={handleClose} type="close" color="error">
+            <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel
             </MDButton>
           </MDBox>

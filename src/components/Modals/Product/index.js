@@ -13,6 +13,7 @@ import {
   Slider,
   FormControlLabel,
   Checkbox,
+  CircularProgress,
 } from "@mui/material";
 import MDButton from "components/MDButton";
 import {
@@ -47,6 +48,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
   const [dairy_free, setDairyFree] = useState(item ? item.isDairyFree : false);
   const [gluten_free, setGlutenFree] = useState(item ? item.isGlutenFree : false);
   const [vegan, setVegan] = useState(item ? item.isVegan : false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   useEffect(() => {
     if (!item) return;
@@ -145,6 +147,12 @@ export function ProductModal({ open, handleClose, item, categories }) {
 
   const handleVegan = (event) => {
     setVegan(event.target.checked);
+  };
+
+  const handleImageLoad = () => {
+    setTimeout(() => {
+      setIsImageLoading(false);
+    }, 500);
   };
 
   function valuetext(value) {
@@ -387,6 +395,21 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 type="file"
                 onChange={handlePhotoChange}
               />
+              {isImageLoading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    display: "flex",
+                    width: "26%",
+                    height: "50%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "rgba(255, 255, 255)",
+                  }}
+                >
+                  <CircularProgress />
+                </div>
+              )}
               <img
                 src={
                   photo
@@ -397,6 +420,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 }
                 alt="Preview"
                 style={{ width: "100%", aspectRatio: "1/1", objectFit: "contain" }}
+                onLoad={handleImageLoad}
               />
               <label htmlFor="raised-button-file">
                 {/* <MDButton color="primary" sx={{ Height: "50%", bgcolor: "primary" }}>
@@ -409,11 +433,11 @@ export function ProductModal({ open, handleClose, item, categories }) {
             </div>
           </form>
 
-          <MDBox display="flex" alignItems="center" width="30%" justifyContent="space-evenly">
-            <MDButton color="primary" onClick={handleSave}>
+          <MDBox display="flex" alignItems="center" width="15svw" justifyContent="space-evenly">
+            <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
               Save
             </MDButton>
-            <MDButton onClick={handleClose} type="close" color="error">
+            <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel
             </MDButton>
           </MDBox>
