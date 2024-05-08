@@ -100,7 +100,7 @@ export default function App() {
         setCurrentUser(true);
         localStorage.setItem("currentUser", true);
         if (pathname === "/authentication/sign-in") {
-          navigate("/produse");
+          navigate("/homepage");
         }
       })
       .catch(function (error) {
