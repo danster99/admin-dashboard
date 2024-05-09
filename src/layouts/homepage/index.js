@@ -19,6 +19,7 @@ import { DeleteModal } from "components/Modals/Delete";
 import { CardModal } from "components/Modals/Card";
 
 function Homepage() {
+  const menu = localStorage.getItem("menu");
   const url = localStorage.getItem("baseURL");
   const [rows, setRows] = useState([]);
   const [cards, setCards] = useState([]);
@@ -88,7 +89,7 @@ function Homepage() {
 
   const refreshData = async () => {
     try {
-      const response = await fetch(url + "/api/menu/1/homepageCards/");
+      const response = await fetch(url + "/api/menu/" + menu + "/homepageCards/");
       const json = await response.json();
       const response2 = await fetch(url + "/api/homepage-row/");
       const json2 = await response2.json();

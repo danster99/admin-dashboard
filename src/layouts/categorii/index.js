@@ -17,6 +17,7 @@ import MDButton from "components/MDButton";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function Categories() {
+  const menu = localStorage.getItem("menu");
   const url = localStorage.getItem("baseURL");
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -52,7 +53,7 @@ function Categories() {
 
   const refreshData = async () => {
     try {
-      const response = await fetch(url + "/api/menu/1/categories/");
+      const response = await fetch(url + "/api/menu/" + menu + "/categories/");
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {

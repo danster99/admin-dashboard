@@ -112,8 +112,6 @@ export function RowModal({ open, handleClose, row }) {
     }
   };
 
-  console.log("RowModal-row:", row);
-
   return (
     <div>
       <Modal

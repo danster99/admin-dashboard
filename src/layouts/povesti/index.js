@@ -27,6 +27,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 
 function Stories() {
+  const menu = localStorage.getItem("menu");
   const url = localStorage.getItem("baseURL");
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -61,7 +62,7 @@ function Stories() {
 
   const refreshData = async () => {
     try {
-      const response = await fetch(url + "/api/menu/1/stories/");
+      const response = await fetch(url + "/api/menu/" + menu + "/stories/");
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {

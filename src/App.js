@@ -75,6 +75,7 @@ const client = axios.create({
 });
 
 export default function App() {
+  const [restaurant, setRestaurant] = useState(null);
   const [currentUser, setCurrentUser] = useState(false);
   const navigate = useNavigate();
   const [controller, dispatch] = useMaterialUIController();
@@ -98,7 +99,12 @@ export default function App() {
       .get("/me/")
       .then(function (res) {
         setCurrentUser(true);
+        localStorage.setItem("profile", res.data);
+        localStorage.setItem("menu", res.data.menus[0].id);
         localStorage.setItem("currentUser", true);
+        client
+          .get("/api/restaurant/" + res.data.restaurant + "/")
+          .then((res) => setRestaurant(res.data));
         if (pathname === "/authentication/sign-in") {
           navigate("/homepage");
         }
@@ -225,7 +231,7 @@ export default function App() {
             color={sidenavColor}
             //brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brand={false}
-            brandName="Restaurant X PlatePal"
+            brandName={restaurant ? restaurant.name + " X PlatePal" : "Restaurant X PlatePal"}
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}

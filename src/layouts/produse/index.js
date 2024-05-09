@@ -21,8 +21,10 @@ import { DeleteModal } from "components/Modals/Delete";
 import { Typography } from "@mui/material";
 import MDButton from "components/MDButton";
 import CircularProgress from "@mui/material/CircularProgress";
+import menu from "assets/theme/components/menu";
 
 function Products() {
+  const menu = localStorage.getItem("menu");
   const url = localStorage.getItem("baseURL");
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState(null);
@@ -59,9 +61,9 @@ function Products() {
 
   const refreshData = async () => {
     try {
-      const categResponse = await fetch(url + "/api/menu/1/categories/");
+      const categResponse = await fetch(url + "/api/menu/" + menu + "/categories/");
       const categories = await categResponse.json();
-      const response = await fetch(url + "/api/menu/1/items/");
+      const response = await fetch(url + "/api/menu/" + menu + "/items/");
       const jsonData = await response.json();
       const food = jsonData.food;
       var items = [];
