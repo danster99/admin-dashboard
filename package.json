@@ -37,7 +37,7 @@
     "yup": "1.1.1"
   },
   "scripts": {
-    "local_start": "set PORT=3001 && set GENERATE_SOURCEMAP=false && react-scripts start",
+    "local_start": "set GENERATE_SOURCEMAP=false && react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts --max_old_space_size=1024 build",
     "test": "react-scripts test",

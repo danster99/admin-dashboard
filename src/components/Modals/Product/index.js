@@ -49,6 +49,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
   const [gluten_free, setGlutenFree] = useState(item ? item.isGlutenFree : false);
   const [vegan, setVegan] = useState(item ? item.isVegan : false);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [requestLoading, setRequestLoading] = useState(false);
 
   useEffect(() => {
     if (!item) return;
@@ -161,6 +162,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
   }
 
   const handleSave = () => {
+    setRequestLoading(true);
     let obj = {};
     if (item) {
       obj.id = item.id;
@@ -203,7 +205,14 @@ export function ProductModal({ open, handleClose, item, categories }) {
             "X-CSRFToken": Cookies.get("csrftoken"),
           },
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              handleClose();
+            } else {
+              console.error("Error:", response);
+              alert("Something went wrong, please check the fields and try again.");
+            }
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
@@ -216,17 +225,23 @@ export function ProductModal({ open, handleClose, item, categories }) {
             "X-CSRFToken": Cookies.get("csrftoken"),
           },
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              handleClose();
+            } else {
+              console.error("Error:", response);
+              alert("Something went wrong, please check the fields and try again.");
+            }
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error: " + error);
+      handleClose();
     }
-
-    // Save the changes
-    handleClose();
   };
 
   ProductModal.propTypes = {
@@ -435,7 +450,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
 
           <MDBox display="flex" alignItems="center" width="15svw" justifyContent="space-evenly">
             <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
-              Save
+              {requestLoading ? <CircularProgress size={20} color="white" /> : "Save"}
             </MDButton>
             <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel

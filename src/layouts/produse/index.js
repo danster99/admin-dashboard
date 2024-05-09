@@ -46,9 +46,9 @@ function Products() {
   };
 
   const handleCloseModal = () => {
+    refreshData();
     setIsOpen(false);
     setIsDeleteOpen(false);
-    refreshData();
   };
 
   const handleDeleteModal = (item) => {

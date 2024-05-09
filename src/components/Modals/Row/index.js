@@ -12,6 +12,7 @@ import {
   Slider,
   FormControlLabel,
   Checkbox,
+  CircularProgress,
 } from "@mui/material";
 import {
   Modal,
@@ -28,6 +29,7 @@ export function RowModal({ open, handleClose, row }) {
   const [title, setTitle] = useState(row ? row.title : "");
   const [order, setOrder] = useState(row ? row.order : 0);
   const [errors, setErrors] = useState({ title: "" });
+  const [requestLoading, setRequestLoading] = useState(false);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -43,7 +45,9 @@ export function RowModal({ open, handleClose, row }) {
   };
 
   const handleSave = async () => {
+    setRequestLoading(true);
     if (errors.title) {
+      setRequestLoading(false);
       return;
     }
     let obj = {};
@@ -69,7 +73,14 @@ export function RowModal({ open, handleClose, row }) {
             "X-CSRFToken": Cookies.get("csrftoken"),
           },
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              handleClose();
+            } else {
+              console.error("Error:", response);
+              alert("Something went wrong, please check the fields and try again.");
+            }
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
@@ -82,17 +93,23 @@ export function RowModal({ open, handleClose, row }) {
             "X-CSRFToken": Cookies.get("csrftoken"),
           },
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              handleClose();
+            } else {
+              console.error("Error:", response);
+              alert("Something went wrong, please check the fields and try again.");
+            }
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error: " + error);
+      handleClose();
     }
-
-    // Save the changes
-    handleClose();
   };
 
   console.log("RowModal-row:", row);
@@ -140,7 +157,7 @@ export function RowModal({ open, handleClose, row }) {
             justifyContent="space-evenly"
           >
             <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
-              Save
+              {requestLoading ? <CircularProgress size={20} color="white" /> : "Save"}
             </MDButton>
             <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel

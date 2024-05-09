@@ -26,71 +26,39 @@ import {
   style,
 } from "components/Modals/style";
 
-export function CardModal({ open, handleClose, card, rows }) {
-  const sizeMarks = [
-    {
-      value: "s",
-      label: "S",
-    },
-    {
-      value: "m",
-      label: "M",
-    },
-    {
-      value: "l",
-      label: "L",
-    },
-    {
-      value: "xl",
-      label: "XL",
-    },
-  ];
-
+export function StoryModal({ open, handleClose, story }) {
   const url = localStorage.getItem("baseURL");
-  const [title, setTitle] = useState(card ? card.title : "");
-  const [row, setRow] = useState(card ? rows.find((r) => r.id === card.row).title : "");
-  const [size, setSize] = useState(card ? sizeMarks.find((s) => s.value === card.size).label : "");
-  const [photo, setPhoto] = useState(card ? card.b2StorageFile : "");
-  const [order, setOrder] = useState(card ? card.order : 0);
-  const [active, setActive] = useState(card ? card.active : false);
-  const [links_to, setLinksTo] = useState(card ? card.links_to : "");
-  const [errors, setErrors] = useState({ title: "", size: "" });
+  const [title, setTitle] = useState(story ? story.title : "");
+  const [description, setDescription] = useState(story ? story.description : "");
+  const [photo, setPhoto] = useState(story ? story.b2StorageFile : "");
+  const [active, setActive] = useState(story ? story.active : false);
+  const [errors, setErrors] = useState({ title: "", description: "" });
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [requestLoading, setRequestLoading] = useState(false);
 
   useEffect(() => {
-    if (!card) return;
-    setTitle(card.title);
-    setRow(rows.length > 0 ? rows.find((r) => r.id === card.row).title : "");
-    setSize(sizeMarks.find((s) => s.value === card.size).label);
-    setPhoto(card.b2StorageFile);
-    setOrder(card.order);
-    setActive(card.active);
-    setLinksTo(card.links_to);
-  }, [card]);
+    if (!story) return;
+    setTitle(story.title);
+    setDescription(story.description);
+    setPhoto(story.b2StorageFile);
+    setActive(story.active);
+  }, [story]);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
     if (event.target.value.trim() === "") {
-      setErrors({ ...errors, title: "Card title is required" });
+      setErrors({ ...errors, title: "Story title is required" });
     } else {
       setErrors({ ...errors, title: "" });
     }
   };
 
-  const handleRowChange = (event) => {
-    rows.map((row) => {
-      if (row.title === event.target.value) {
-        setRow(row.title);
-      }
-    });
-  };
-
-  const handleSizeChange = (event) => {
-    if (sizeMarks.find((s) => s.label === event.target.value)) {
-      setSize(event.target.value);
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+    if (event.target.value.trim() === "") {
+      setErrors({ ...errors, description: "Story description is required" });
     } else {
-      setErrors({ ...errors, size: "Size should be one of: S M L XL" });
+      setErrors({ ...errors, description: "" });
     }
   };
 
@@ -98,44 +66,29 @@ export function CardModal({ open, handleClose, card, rows }) {
     setPhoto(event.target.files[0]);
   };
 
-  const handleOrderChange = (event) => {
-    setOrder(event.target.value);
-  };
-
   const handleActiveChange = (event) => {
     setActive(event.target.checked);
   };
 
-  const handleLinksToChange = (event) => {
-    setLinksTo(event.target.value);
-  };
-
-  const handleImageLoad = () => {
-    setTimeout(() => {
-      setIsImageLoading(false);
-    }, 500);
-  };
-
   const handleSave = async () => {
     setRequestLoading(true);
-    if (errors.title) {
+    if (errors.title || errors.description) {
       setRequestLoading(false);
       return;
     }
     let obj = {};
-    obj.menu = 1;
-    if (card) {
-      obj.id = card.id;
+    if (story) {
+      obj.id = story.id;
+      obj.menu = story.menu;
+    } else {
+      obj.menu = 1;
     }
     obj.title = title;
-    obj.row = rows.find((r) => r.title === row).id;
-    obj.size = sizeMarks.find((s) => s.label === size).value;
+    obj.description = description;
     if (typeof photo != "string") {
       obj.b2StorageFile = new File([photo], photo.name, { type: photo.type });
     }
-    obj.order = order;
     obj.active = active;
-    obj.links_to = links_to;
 
     const formData = new FormData();
     for (const key in obj) {
@@ -143,8 +96,8 @@ export function CardModal({ open, handleClose, card, rows }) {
     }
 
     try {
-      if (card) {
-        fetch(url + "/api/homepage-card/" + card.id + "/", {
+      if (story) {
+        fetch(url + "/api/story/" + story.id + "/", {
           method: "PUT",
           body: formData,
           credentials: "include",
@@ -164,7 +117,7 @@ export function CardModal({ open, handleClose, card, rows }) {
             console.error("Error:", error);
           });
       } else {
-        fetch(url + "/api/homepage-card/", {
+        fetch(url + "/api/story/", {
           method: "POST",
           body: formData,
           credentials: "include",
@@ -191,11 +144,16 @@ export function CardModal({ open, handleClose, card, rows }) {
     }
   };
 
-  CardModal.propTypes = {
+  const handleImageLoad = () => {
+    setTimeout(() => {
+      setIsImageLoading(false);
+    }, 500);
+  };
+
+  StoryModal.propTypes = {
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    card: PropTypes.object.isRequired,
-    rows: PropTypes.array.isRequired,
+    story: PropTypes.object.isRequired,
   };
 
   return (
@@ -221,49 +179,20 @@ export function CardModal({ open, handleClose, card, rows }) {
                 error={errors["title"]}
               />
               <TextField
-                id="row"
-                select
-                label="Row"
-                defaultValue={row}
-                onChange={handleRowChange}
-                helperText="Please select a row"
-                size="small"
-              >
-                {rows.map((option) => (
-                  <MenuItem key={option.id} value={option.title}>
-                    {option.title}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                id="size"
-                select
-                label="Size"
-                defaultValue={size}
-                onChange={handleSizeChange}
-                helperText="Please select a size"
-                size="small"
-                error={errors["size"]}
-              >
-                {sizeMarks.map((option) => (
-                  <MenuItem key={option.value} value={option.label}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField label="Order" value={order} onChange={handleOrderChange} required />
+                label="Description"
+                value={description}
+                onChange={handleDescriptionChange}
+                required
+                multiline
+                rows={10}
+                inputProps={{ maxLength: 300 }}
+              />
               <FormControlLabel
                 control={<Checkbox checked={active} onChange={handleActiveChange} />}
                 label="Is Active"
                 labelPlacement="end"
                 value={active}
                 onChange={handleActiveChange}
-              />
-              <TextField
-                label="Links To"
-                value={links_to}
-                onChange={handleLinksToChange}
-                required
               />
             </div>
             <div style={{ ...formPhoto, width: "45%", height: "100%" }}>
@@ -281,7 +210,7 @@ export function CardModal({ open, handleClose, card, rows }) {
                     position: "absolute",
                     display: "flex",
                     width: "38%",
-                    height: "50%",
+                    height: "60%",
                     justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: "rgba(255, 255, 255)",

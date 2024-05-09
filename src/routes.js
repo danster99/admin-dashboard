@@ -47,6 +47,7 @@ import SignIn from "layouts/authentication/sign-in";
 import SignOut from "layouts/authentication/sign-out";
 import Categories from "layouts/categorii";
 import Homepage from "layouts/homepage";
+import Stories from "layouts/povesti";
 // @mui icons
 import Icon from "@mui/material/Icon";
 import { Visibility } from "@mui/icons-material";
@@ -75,6 +76,14 @@ const routes = [
     icon: <Icon fontSize="small">home</Icon>,
     route: "/homepage",
     component: <Homepage />,
+  },
+  {
+    type: "collapse",
+    name: "Povesti",
+    key: "povesti",
+    icon: <Icon fontSize="small">edit_note</Icon>,
+    route: "/povesti",
+    component: <Stories />,
   },
   {
     type: "collapse",

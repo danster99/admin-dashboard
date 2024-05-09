@@ -45,9 +45,9 @@ function Homepage() {
   };
 
   const handleCloseRowsModal = () => {
+    refreshData();
     setIsRowsOpen(false);
     setIsRowsDeleteOpen(false);
-    setTimeout(() => refreshData(), 300);
   };
 
   const handleOpenRowModal = (row) => {
@@ -66,9 +66,9 @@ function Homepage() {
   };
 
   const handleCloseCardsModal = () => {
+    refreshData();
     setIsCardsOpen(false);
     setIsCardsDeleteOpen(false);
-    setTimeout(() => refreshData(), 300);
   };
 
   const handleOpenCardModal = (card) => {

@@ -39,9 +39,9 @@ function Categories() {
   };
 
   const handleCloseModal = () => {
+    refreshData();
     setIsOpen(false);
     setIsDeleteOpen(false);
-    setTimeout(() => refreshData(), 200);
   };
 
   const handleDeleteModal = (category) => {

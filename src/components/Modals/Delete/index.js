@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 
 export function DeleteModal({ open, handleClose, item, type }) {
   const url = localStorage.getItem("baseURL");
+
   const handleDelete = () => {
     fetch(url + "/api/" + type + "/" + item.id + "/", {
       method: "DELETE",
@@ -13,11 +14,19 @@ export function DeleteModal({ open, handleClose, item, type }) {
         "X-CSRFToken": Cookies.get("csrftoken"),
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          handleClose();
+        } else {
+          console.error("Error:", response);
+          alert("Something went wrong, please check the fields and try again.");
+        }
+      })
       .catch((error) => {
         console.error("Error:", error);
+        alert("Error: " + error);
+        handleClose();
       });
-    handleClose();
   };
 
   DeleteModal.propTypes = {

@@ -12,6 +12,7 @@ import {
   Slider,
   FormControlLabel,
   Checkbox,
+  CircularProgress,
 } from "@mui/material";
 import {
   Modal,
@@ -28,6 +29,7 @@ export function CategoryModal({ open, handleClose, category }) {
   const [name, setName] = useState(category ? category.name : "");
   const [isFood, setIsFood] = useState(category ? category.isFood : false);
   const [errors, setErrors] = useState({ name: "" });
+  const [requestLoading, setRequestLoading] = useState(false);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -43,7 +45,9 @@ export function CategoryModal({ open, handleClose, category }) {
   };
 
   const handleSave = async () => {
+    setRequestLoading(true);
     if (errors.name) {
+      setRequestLoading(false);
       return;
     }
     let obj = {};
@@ -69,7 +73,14 @@ export function CategoryModal({ open, handleClose, category }) {
             "X-CSRFToken": Cookies.get("csrftoken"),
           },
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              handleClose();
+            } else {
+              console.error("Error:", response);
+              alert("Something went wrong, please check the fields and try again.");
+            }
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
@@ -82,17 +93,23 @@ export function CategoryModal({ open, handleClose, category }) {
             "X-CSRFToken": Cookies.get("csrftoken"),
           },
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) {
+              handleClose();
+            } else {
+              console.error("Error:", response);
+              alert("Something went wrong, please check the fields and try again.");
+            }
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
       }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error: " + error);
+      handleClose();
     }
-
-    // Save the changes
-    handleClose();
   };
 
   return (
@@ -129,7 +146,7 @@ export function CategoryModal({ open, handleClose, category }) {
           </form>
           <MDBox display="flex" alignItems="center" width="15svw" justifyContent="space-evenly">
             <MDButton color="primary" onClick={handleSave} style={{ width: "5svw" }}>
-              Save
+              {requestLoading ? <CircularProgress size={20} color="white" /> : "Save"}
             </MDButton>
             <MDButton onClick={handleClose} type="close" color="error" style={{ width: "5svw" }}>
               Cancel
