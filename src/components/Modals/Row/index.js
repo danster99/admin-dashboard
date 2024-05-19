@@ -26,6 +26,7 @@ import {
 
 export function RowModal({ open, handleClose, row }) {
   const url = localStorage.getItem("baseURL");
+  const menu = localStorage.getItem("menu");
   const [title, setTitle] = useState(row ? row.title : "");
   const [order, setOrder] = useState(row ? row.order : 0);
   const [errors, setErrors] = useState({ title: "" });
@@ -51,7 +52,7 @@ export function RowModal({ open, handleClose, row }) {
       return;
     }
     let obj = {};
-    obj.menu = 1;
+    obj.menu = menu;
     if (row) {
       obj.id = row.id;
     }

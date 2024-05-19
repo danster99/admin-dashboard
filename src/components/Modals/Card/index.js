@@ -14,6 +14,9 @@ import {
   FormControlLabel,
   Checkbox,
   CircularProgress,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
 } from "@mui/material";
 import MDButton from "components/MDButton";
 import {
@@ -47,6 +50,7 @@ export function CardModal({ open, handleClose, card, rows }) {
   ];
 
   const url = localStorage.getItem("baseURL");
+  const menu = localStorage.getItem("menu");
   const [title, setTitle] = useState(card ? card.title : "");
   const [row, setRow] = useState(card ? rows.find((r) => r.id === card.row).title : "");
   const [size, setSize] = useState(card ? sizeMarks.find((s) => s.value === card.size).label : "");
@@ -54,9 +58,11 @@ export function CardModal({ open, handleClose, card, rows }) {
   const [order, setOrder] = useState(card ? card.order : 0);
   const [active, setActive] = useState(card ? card.active : false);
   const [links_to, setLinksTo] = useState(card ? card.links_to : "");
-  const [errors, setErrors] = useState({ title: "", size: "" });
+  const [errors, setErrors] = useState({ title: "", size: "", links_to: "" });
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [requestLoading, setRequestLoading] = useState(false);
+  const [redirectType, setRedirectType] = useState("external");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     if (!card) return;
@@ -67,7 +73,24 @@ export function CardModal({ open, handleClose, card, rows }) {
     setOrder(card.order);
     setActive(card.active);
     setLinksTo(card.links_to);
+    if (card.links_to.includes("http")) {
+      setRedirectType("external");
+    } else if (card.links_to.includes("category")) {
+      setRedirectType("category");
+    } else {
+      setRedirectType("empty");
+    }
   }, [card]);
+
+  useEffect(() => {
+    fetch(
+      localStorage.getItem("baseURL") + "/api/menu/" + localStorage.getItem("menu") + "/categories/"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data);
+      });
+  }, []);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -106,8 +129,31 @@ export function CardModal({ open, handleClose, card, rows }) {
     setActive(event.target.checked);
   };
 
+  const handleRedirectChange = (event, newRedirectType) => {
+    setRedirectType(newRedirectType);
+    if (newRedirectType === "empty") {
+      setLinksTo("");
+    }
+  };
+
   const handleLinksToChange = (event) => {
-    setLinksTo(event.target.value);
+    setErrors({ ...errors, links_to: "" });
+    if (redirectType === "external") {
+      if (!event.target.value.includes("http")) {
+        setErrors({ ...errors, links_to: "Please enter a valid URL" });
+      }
+      setLinksTo(event.target.value);
+    } else if (redirectType === "category") {
+      categories.map((category) => {
+        if (category.name === event.target.value) {
+          console.log(category);
+          if (category.isFood) setLinksTo("/menu/?category=" + category.name);
+          else setLinksTo("/drinks/?category=" + category.name);
+        }
+      });
+    } else if (redirectType === "empty") {
+      setLinksTo(null);
+    }
   };
 
   const handleImageLoad = () => {
@@ -123,7 +169,7 @@ export function CardModal({ open, handleClose, card, rows }) {
       return;
     }
     let obj = {};
-    obj.menu = 1;
+    obj.menu = menu;
     if (card) {
       obj.id = card.id;
     }
@@ -259,12 +305,61 @@ export function CardModal({ open, handleClose, card, rows }) {
                 value={active}
                 onChange={handleActiveChange}
               />
-              <TextField
-                label="Links To"
-                value={links_to}
-                onChange={handleLinksToChange}
-                required
-              />
+              <div
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+              >
+                <Typography id="discrete-slider"> Redirect to{"  "}</Typography>
+                <ToggleButtonGroup
+                  color={"black"}
+                  value={redirectType}
+                  onChange={handleRedirectChange}
+                  exclusive
+                  aria-label="Platform"
+                >
+                  <ToggleButton value="external" size="small">
+                    URL
+                  </ToggleButton>
+                  <ToggleButton value="category" size="small">
+                    Category
+                  </ToggleButton>
+                  <ToggleButton value="empty" size="small">
+                    None
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+              {redirectType === "external" ? (
+                <TextField
+                  label="External URL"
+                  value={links_to}
+                  helperText="Please enter a valid URL"
+                  onChange={handleLinksToChange}
+                  error={errors["links_to"]}
+                  required
+                />
+              ) : redirectType === "category" ? (
+                <TextField
+                  id="category"
+                  select
+                  label="Category"
+                  defaultValue={links_to.split("=").pop()}
+                  onChange={handleLinksToChange}
+                  helperText="Click to select a category"
+                  required
+                >
+                  {categories.map((option) => (
+                    <MenuItem key={option.id} value={option.name}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              ) : (
+                <TextField
+                  label="Empty"
+                  value=""
+                  helperText="This card will not redirect anywhere"
+                  disabled
+                />
+              )}
             </div>
             <div style={{ ...formPhoto, width: "45%", height: "100%" }}>
               <input

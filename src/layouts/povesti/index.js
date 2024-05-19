@@ -25,6 +25,7 @@ import {
 import MDButton from "components/MDButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import zIndex from "@mui/material/styles/zIndex";
 
 function Stories() {
   const menu = localStorage.getItem("menu");
@@ -184,7 +185,7 @@ function StoryCard({ story, handleOpenModal, handleDeleteModal }) {
     }, 500);
   };
   return story != null ? (
-    <MDBox bgColor="black" sx={{ aspectRatio: "11/20" }}>
+    <MDBox bgColor="black" sx={{ aspectRatio: "11/20", position: "relative" }}>
       <Typography
         variant="h5"
         color="white"
@@ -199,6 +200,24 @@ function StoryCard({ story, handleOpenModal, handleDeleteModal }) {
           aspectRatio: "11/17",
         }}
       >
+        <div
+          style={{
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            backgroundColor: "black",
+            opacity: "0.7",
+            zIndex: "10",
+            alignItems: "center",
+            justifyContent: "center",
+            display: "flex",
+            visibility: story.active ? "hidden" : "visible",
+          }}
+        >
+          <Typography variant="h3" sx={{ color: "#ffffff", fontWeight: 200 }}>
+            Inactive
+          </Typography>
+        </div>
         {isImageLoading && (
           <div
             style={{
@@ -245,7 +264,7 @@ function StoryCard({ story, handleOpenModal, handleDeleteModal }) {
         display="flex"
         alignItems="center"
         justifyContent="space-evenly"
-        sx={{ width: "100%", aspectRatio: "11/3" }}
+        sx={{ width: "100%", aspectRatio: "11/3", zIndex: "1001" }}
       >
         <MDButton color="primary" style={{ width: "40%" }} onClick={() => handleOpenModal(story)}>
           <Icon

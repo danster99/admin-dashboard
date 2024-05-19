@@ -22,6 +22,7 @@ import { Typography } from "@mui/material";
 import MDButton from "components/MDButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import menu from "assets/theme/components/menu";
+import Header from "layouts/profile/components/Header";
 
 function Products() {
   const menu = localStorage.getItem("menu");
@@ -139,6 +140,7 @@ function Products() {
                     columns: [
                       { Header: "Nume", accessor: "name", width: "25%" },
                       { Header: "Categorie", accessor: "category", width: "15%" },
+                      { Header: "Activ", accessor: "active", width: "10%" },
                       { Header: "Vegan", accessor: "vegan" },
                       { Header: "Dariy Free", accessor: "dairy_free" },
                       { Header: "Gluten Free", accessor: "gluten_free" },
@@ -179,6 +181,19 @@ function row(item, handleOpenModal, handleDeleteModal) {
     name: item.name,
     category: item.category.name,
     price: item.price,
+    active: item.isAvailable ? (
+      <MDBox display="flex" alignItems="center">
+        <Icon fontSize="small" color="success">
+          check
+        </Icon>
+      </MDBox>
+    ) : (
+      <MDBox display="flex" alignItems="center">
+        <Icon fontSize="small" color="error">
+          close
+        </Icon>
+      </MDBox>
+    ),
     vegan: item.isVegan ? (
       <MDBox display="flex" alignItems="center">
         <Icon fontSize="small" color="success">

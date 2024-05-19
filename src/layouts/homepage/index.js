@@ -93,7 +93,7 @@ function Homepage() {
       const json = await response.json();
       const response2 = await fetch(url + "/api/homepage-row/");
       const json2 = await response2.json();
-      const rows = json2.filter((row) => Object.keys(json).includes(row.title));
+      const rows = json2.filter((row) => menu == row.menu);
       setRows(rows);
       setIsRowsLoading(false);
       let newCards = [];

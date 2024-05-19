@@ -45,6 +45,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
   const [sugar, setSugar] = useState(item ? item.nutriValues["Zaharuri"] : "");
   const [protein, setProtein] = useState(item ? item.nutriValues["Proteine"] : "");
   const [salt, setSalt] = useState(item ? item.nutriValues["Sare"] : "");
+  const [available, setAvailable] = useState(item ? item.isAvailable : true);
   const [dairy_free, setDairyFree] = useState(item ? item.isDairyFree : false);
   const [gluten_free, setGlutenFree] = useState(item ? item.isGlutenFree : false);
   const [vegan, setVegan] = useState(item ? item.isVegan : false);
@@ -70,6 +71,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
     setDairyFree(item.isDairyFree);
     setGlutenFree(item.isGlutenFree);
     setVegan(item.isVegan);
+    setAvailable(item.isAvailable);
   }, [item]);
 
   const handleNameChange = (event) => {
@@ -138,8 +140,12 @@ export function ProductModal({ open, handleClose, item, categories }) {
     // Handle form submission logic here
   };
 
-  const handleDairyFree = () => {
-    setDairyFree(!dairy_free);
+  const handleAvailable = (event) => {
+    setAvailable(event.target.checked);
+  };
+
+  const handleDairyFree = (event) => {
+    setDairyFree(event.target.checked);
   };
 
   const handleGlutenFree = (event) => {
@@ -186,6 +192,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
       Sare: salt,
     };
     obj.nutriValues = JSON.stringify(nv);
+    obj.isAvailable = available;
     obj.isDairyFree = dairy_free;
     obj.isGlutenFree = gluten_free;
     obj.isVegan = vegan;
@@ -381,6 +388,13 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 style={{ width: "100%", marginBottom: "8px" }}
               />
               {/* </Collapse> */}
+              <FormControlLabel
+                control={<Checkbox checked={available} onChange={handleAvailable} />}
+                label="Activ"
+                labelPlacement="end"
+                value={available}
+                onChange={handleAvailable}
+              />
               <FormControlLabel
                 control={<Checkbox checked={dairy_free} onChange={handleDairyFree} />}
                 label="DairyFree"

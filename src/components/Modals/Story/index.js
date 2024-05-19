@@ -25,9 +25,11 @@ import {
   formPhoto,
   style,
 } from "components/Modals/style";
+import menu from "assets/theme/components/menu";
 
 export function StoryModal({ open, handleClose, story }) {
   const url = localStorage.getItem("baseURL");
+  const menu = localStorage.getItem("menu");
   const [title, setTitle] = useState(story ? story.title : "");
   const [description, setDescription] = useState(story ? story.description : "");
   const [photo, setPhoto] = useState(story ? story.b2StorageFile : "");
@@ -77,12 +79,7 @@ export function StoryModal({ open, handleClose, story }) {
       return;
     }
     let obj = {};
-    if (story) {
-      obj.id = story.id;
-      obj.menu = story.menu;
-    } else {
-      obj.menu = 1;
-    }
+    obj.menu = menu;
     obj.title = title;
     obj.description = description;
     if (typeof photo != "string") {

@@ -25,6 +25,7 @@ import {
 } from "components/Modals/style";
 
 export function CategoryModal({ open, handleClose, category }) {
+  const menu = localStorage.getItem("menu");
   const url = localStorage.getItem("baseURL");
   const [name, setName] = useState(category ? category.name : "");
   const [isFood, setIsFood] = useState(category ? category.isFood : false);
@@ -51,7 +52,7 @@ export function CategoryModal({ open, handleClose, category }) {
       return;
     }
     let obj = {};
-    obj.menu = 1;
+    obj.menu = menu;
     if (category) {
       obj.id = category.id;
     }
