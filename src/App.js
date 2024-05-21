@@ -216,7 +216,7 @@ export default function App() {
           <Route
             path="*"
             element={
-              currentUser ? <Navigate to="/produse" /> : <Navigate to="/authentication/sign-in" />
+              currentUser ? <Navigate to="/meniu" /> : <Navigate to="/authentication/sign-in" />
             }
           />
         </Routes>
@@ -246,7 +246,7 @@ export default function App() {
         <Route
           path="*"
           element={
-            currentUser ? <Navigate to="/produse" /> : <Navigate to="/authentication/sign-in" />
+            currentUser ? <Navigate to="/meniu" /> : <Navigate to="/authentication/sign-in" />
           }
         />
       </Routes>

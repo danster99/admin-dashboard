@@ -165,7 +165,7 @@ function Products() {
                 coloredShadow="primary"
               >
                 <MDTypography variant="h6" color="white">
-                  Produse
+                  Meniu
                 </MDTypography>
               </MDBox>
               <MDBox

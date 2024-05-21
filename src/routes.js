@@ -70,6 +70,14 @@ const routes = [
   // },
   {
     type: "collapse",
+    name: "Meniu",
+    key: "meniu",
+    icon: <Icon fontSize="small">inventory</Icon>,
+    route: "/meniu",
+    component: <Products />,
+  },
+  {
+    type: "collapse",
     name: "Homepage",
     key: "homepage",
     icon: <Icon fontSize="small">home</Icon>,
@@ -83,14 +91,6 @@ const routes = [
     icon: <Icon fontSize="small">edit_note</Icon>,
     route: "/povesti",
     component: <Stories />,
-  },
-  {
-    type: "collapse",
-    name: "Produse",
-    key: "produse",
-    icon: <Icon fontSize="small">inventory</Icon>,
-    route: "/produse",
-    component: <Products />,
   },
   // {
   //   type: "collapse",
