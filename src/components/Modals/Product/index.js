@@ -34,6 +34,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
   const [price, setPrice] = useState(item ? item.price : "");
   const [photo, setPhoto] = useState(item ? item.b2StorageFile : "");
   const [category, setCategory] = useState(item ? item.category.name : "");
+  const [order, setOrder] = useState(item ? item.order : 0);
   const [alergens, setAlergens] = useState(item ? item.alergens : "");
   const [spiceLvl, setSpiceLvl] = useState(item ? item.spiceLvl : 0);
   const [energy, setEnergy] = useState(item ? item.nutriValues["Valoare energetica"] : "");
@@ -59,6 +60,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
     setPhoto(item.b2StorageFile);
     setPrice(item.price);
     setCategory(item.category.name);
+    setOrder(item.order);
     setAlergens(item.alergens);
     setEnergy(item ? item.nutriValues["Valoare energetica"] : "");
     setFat(item ? item.nutriValues["Grasimi"] : "");
@@ -100,6 +102,10 @@ export function ProductModal({ open, handleClose, item, categories }) {
         setCategory(option.name);
       }
     });
+  };
+
+  const handleOrderChange = (event) => {
+    setOrder(event.target.value);
   };
 
   const handleSpiceLvlChange = (event) => {
@@ -174,6 +180,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
       obj.id = item.id;
     }
     obj.category = categories.find((cat) => cat.name === category).id;
+    obj.order = order;
     obj.name = name;
     obj.description = description;
     obj.price = price;
@@ -318,6 +325,13 @@ export function ProductModal({ open, handleClose, item, categories }) {
                   </MenuItem>
                 ))}
               </TextField>
+              <TextField
+                label="Order"
+                value={order}
+                onChange={handleOrderChange}
+                required
+                type="number"
+              />
               <p>Spice Level</p>
               <Slider
                 aria-label="Always visible"

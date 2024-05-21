@@ -198,6 +198,7 @@ function DataTable({
                   key={idx}
                   {...column.getHeaderProps(isSorted && column.getSortByToggleProps())}
                   width={column.width ? column.width : "auto"}
+                  maxWidth={column.maxWidth ? column.maxWidth : "auto"}
                   align={column.align ? column.align : "left"}
                   sorted={setSortedValue(column)}
                 >

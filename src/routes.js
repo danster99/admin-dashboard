@@ -45,7 +45,6 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignOut from "layouts/authentication/sign-out";
-import Categories from "layouts/categorii";
 import Homepage from "layouts/homepage";
 import Stories from "layouts/povesti";
 // @mui icons
@@ -84,14 +83,6 @@ const routes = [
     icon: <Icon fontSize="small">edit_note</Icon>,
     route: "/povesti",
     component: <Stories />,
-  },
-  {
-    type: "collapse",
-    name: "Categorii",
-    key: "categorii",
-    icon: <Icon fontSize="small">category</Icon>,
-    route: "/categorii",
-    component: <Categories />,
   },
   {
     type: "collapse",

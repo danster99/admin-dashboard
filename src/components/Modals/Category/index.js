@@ -29,6 +29,7 @@ export function CategoryModal({ open, handleClose, category }) {
   const url = localStorage.getItem("baseURL");
   const [name, setName] = useState(category ? category.name : "");
   const [isFood, setIsFood] = useState(category ? category.isFood : false);
+  const [order, setOrder] = useState(category ? category.order : 0);
   const [errors, setErrors] = useState({ name: "" });
   const [requestLoading, setRequestLoading] = useState(false);
 
@@ -45,6 +46,10 @@ export function CategoryModal({ open, handleClose, category }) {
     setIsFood(event.target.checked);
   };
 
+  const handleOrderChange = (event) => {
+    setOrder(event.target.value);
+  };
+
   const handleSave = async () => {
     setRequestLoading(true);
     if (errors.name) {
@@ -53,6 +58,7 @@ export function CategoryModal({ open, handleClose, category }) {
     }
     let obj = {};
     obj.menu = menu;
+    obj.order = order;
     if (category) {
       obj.id = category.id;
     }
@@ -139,6 +145,13 @@ export function CategoryModal({ open, handleClose, category }) {
               onChange={handleNameChange}
               required
               error={errors.name ? true : false}
+            />
+            <TextField
+              label="Order"
+              value={order}
+              onChange={handleOrderChange}
+              required
+              type="number"
             />
             <FormControlLabel
               control={<Checkbox checked={isFood} onChange={handleIsFoodChange} />}

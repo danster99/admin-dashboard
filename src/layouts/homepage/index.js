@@ -286,8 +286,12 @@ function homepageRow(item, handleOpenModal, handleDeleteModal, handleCheckboxCha
     title: item.title,
     order: item.order,
     action: (
-      <MDBox>
-        <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(item)}>
+      <MDBox sx={{ maxWidth: "100%", display: "flex", justifyContent: "space-evenly" }}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleOpenModal(item)}
+        >
           <Icon
             sx={{
               fontWeight: "bold",
@@ -297,7 +301,11 @@ function homepageRow(item, handleOpenModal, handleDeleteModal, handleCheckboxCha
             edit
           </Icon>
         </Button>
-        <Button href="#" sx={{ pl: 0 }} onClick={() => handleDeleteModal(item)}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleDeleteModal(item)}
+        >
           <Icon
             href="#"
             sx={{
@@ -332,8 +340,12 @@ function homepageCard(item, handleOpenModal, handleDeleteModal) {
       </MDBox>
     ),
     action: (
-      <MDBox>
-        <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(item)}>
+      <MDBox sx={{ maxWidth: "100%", display: "flex", justifyContent: "space-evenly" }}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleOpenModal(item)}
+        >
           <Icon
             sx={{
               fontWeight: "bold",
@@ -343,7 +355,11 @@ function homepageCard(item, handleOpenModal, handleDeleteModal) {
             edit
           </Icon>
         </Button>
-        <Button href="#" sx={{ pl: 0 }} onClick={() => handleDeleteModal(item)}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleDeleteModal(item)}
+        >
           <Icon
             href="#"
             sx={{

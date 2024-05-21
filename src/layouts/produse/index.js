@@ -1,63 +1,92 @@
-// @mui material components
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-
-// Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-
-import { ProductModal } from "components/Modals/Product";
-import { DeleteModal } from "components/Modals/Delete";
-
-import { Typography } from "@mui/material";
-import MDButton from "components/MDButton";
+import { Typography, Checkbox, IconButton } from "@mui/material";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import LocalBarIcon from "@mui/icons-material/LocalBar";
 import CircularProgress from "@mui/material/CircularProgress";
-import menu from "assets/theme/components/menu";
+import { DeleteModal } from "components/Modals/Delete";
+import { ProductModal } from "components/Modals/Product";
+import { CategoryModal } from "components/Modals/Category";
 import Header from "layouts/profile/components/Header";
 
 function Products() {
   const menu = localStorage.getItem("menu");
   const url = localStorage.getItem("baseURL");
-  const [data, setData] = useState([]);
-  const [categories, setCategories] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [item, setItem] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
 
-  useEffect(() => {
-    refreshData();
-  }, []);
+  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(true);
+  const [isProductDeleteOpen, setIsProductDeleteOpen] = useState(false);
+  const [isCategoryDeleteOpen, setIsCategoryDeleteOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isProductOpen, setIsProductOpen] = useState(false);
+  const [product, setProduct] = useState({});
+  const [category, setCategory] = useState({});
 
-  const handleNewProduct = () => {
-    setIsOpen(true);
-    setItem(null);
+  const handleCheckboxChange = (categ) => {
+    let tempRows = selectedRows;
+    if (selectedRows.includes(categ.id)) {
+      setSelectedRows([...tempRows.filter((r) => r !== categ.id)]);
+    } else {
+      tempRows.push(categ.id);
+      setSelectedRows([...tempRows]);
+    }
   };
 
-  const handleOpenModal = (item) => {
-    setIsOpen(true);
-    setItem(item);
+  const handleCloseProductModal = () => {
+    refreshData();
+    setIsProductOpen(false);
+    setIsProductDeleteOpen(false);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseCategoryModal = () => {
     refreshData();
-    setIsOpen(false);
-    setIsDeleteOpen(false);
+    setIsCategoryOpen(false);
+    setIsCategoryDeleteOpen(false);
   };
 
-  const handleDeleteModal = (item) => {
-    setIsDeleteOpen(true);
-    setItem(item);
-    refreshData();
+  const handleOpenCategoryModal = (category) => {
+    setCategory(category);
+    setIsCategoryOpen(true);
+  };
+
+  const handleOpenProductModal = (product) => {
+    setProduct(product);
+    setIsProductOpen(true);
+  };
+
+  const handleOpenProductDeleteModal = (product) => {
+    setProduct(product);
+    setIsProductDeleteOpen(true);
+  };
+
+  const handleOpenCategoryDeleteModal = (category) => {
+    setCategory(category);
+    setIsCategoryDeleteOpen(true);
+  };
+
+  const handleNewCategoryModal = () => {
+    setCategory(null);
+    setIsCategoryOpen(true);
+  };
+
+  const handleNewProductModal = () => {
+    setProduct(null);
+    setIsProductOpen(true);
   };
 
   const refreshData = async () => {
@@ -85,13 +114,37 @@ function Products() {
             items.push(item);
           });
       });
-      setCategories(categories);
-      setData(items);
+      setCategories(categories.sort((a, b) => b.isFood - a.isFood));
+      setProducts(items);
+      if (selectedRows.length == 0) {
+        setFilteredProducts(items);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setIsLoading(false);
+      setIsProductLoading(false);
+      setIsCategoryLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (selectedRows.length > 0) {
+      let fp = products.filter((p) => selectedRows.includes(p.category.id));
+      setFilteredProducts(fp);
+    } else setFilteredProducts(products);
+  }, [selectedRows]);
+
+  useEffect(() => {
+    refreshData();
+  }, []);
+
+  const tableContainer = {
+    borderRadius: "20px",
+    BorderColor: "black",
+    border: "5px solid grey",
+    margin: "0 0 20px 0",
+    padding: "10px",
+    minHeight: "73svh",
   };
 
   return (
@@ -115,72 +168,148 @@ function Products() {
                   Produse
                 </MDTypography>
               </MDBox>
-              <MDBox mt={3} mx={3}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6} lg={3}>
-                    <MDButton
-                      href="#"
-                      variant="contained"
+              <MDBox
+                pt={3}
+                sx={{ justifyContent: "space-evenly", display: "flex", flexDirection: "row" }}
+              >
+                <div style={{ ...tableContainer, width: "40%" }}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between", padding: "0 5px" }}
+                  >
+                    <Typography variant="h4" style={{ padding: "10px 0 0 10px" }}>
+                      Categorii
+                    </Typography>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      sx={{ padding: "0" }}
                       color="primary"
-                      sx={{ width: "100%", bgcolor: "primary" }}
-                      onClick={isLoading ? null : handleNewProduct}
+                      onClick={handleNewCategoryModal}
                     >
-                      <Typography variant="button" color={"#ffff"} fontWeight={"500"}>
-                        Adauga produs
-                      </Typography>
-                    </MDButton>
-                  </Grid>
-                </Grid>
-              </MDBox>
-              <MDBox pt={3} sx={{ justifyContent: "center" }}>
-                <DataTable
-                  entriesPerPage={{ defaultValue: 10, entries: [10, 25, 50, 100] }}
-                  canSearch={true}
-                  table={{
-                    columns: [
-                      { Header: "Nume", accessor: "name", width: "25%" },
-                      { Header: "Categorie", accessor: "category", width: "15%" },
-                      { Header: "Activ", accessor: "active", width: "10%" },
-                      { Header: "Vegan", accessor: "vegan" },
-                      { Header: "Dariy Free", accessor: "dairy_free" },
-                      { Header: "Gluten Free", accessor: "gluten_free" },
-                      { Header: "Pret", accessor: "price", width: "15%" },
-                      { Header: "Action", accessor: "action", align: "center", width: "10%" },
-                    ],
-                    rows: data.map((item) => row(item, handleOpenModal, handleDeleteModal)),
-                  }}
-                />
-                {isLoading && (
-                  <div style={{ display: "flex", justifyContent: "center", padding: "30px 5px" }}>
-                    <CircularProgress />
+                      <AddCircleRoundedIcon fontSize="inherit" />
+                    </IconButton>
                   </div>
-                )}
+                  <DataTable
+                    showTotalEntries={false}
+                    entriesPerPage={false}
+                    canSearch={false}
+                    table={{
+                      columns: [
+                        { Header: "Select", accessor: "selected", width: "20%" },
+                        { Header: "Nume", accessor: "name", width: "45%" },
+                        { Header: "Ordine", accessor: "order", width: "20%" },
+                        { Header: "Tip", accessor: "isFood", width: "15%" },
+                        {
+                          Header: "Action",
+                          accessor: "action",
+                          align: "center",
+                          width: "20%",
+                        },
+                      ],
+                      rows: categories.map((category) =>
+                        categoryRow(
+                          category,
+                          handleOpenCategoryModal,
+                          handleOpenCategoryDeleteModal,
+                          handleCheckboxChange
+                        )
+                      ),
+                    }}
+                  />
+                  {isCategoryLoading && (
+                    <div style={{ display: "flex", justifyContent: "center", padding: "30px 5px" }}>
+                      <CircularProgress />
+                    </div>
+                  )}
+                </div>
+                <div style={{ ...tableContainer, width: "55%" }}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between", padding: "0 5px" }}
+                  >
+                    <Typography variant="h4" style={{ padding: "10px 0 0 10px" }}>
+                      Produse
+                    </Typography>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      sx={{ padding: "0" }}
+                      color="primary"
+                      onClick={handleNewProductModal}
+                    >
+                      <AddCircleRoundedIcon fontSize="inherit" />
+                    </IconButton>
+                  </div>
+                  <DataTable
+                    showTotalEntries={false}
+                    entriesPerPage={false}
+                    canSearch={false}
+                    table={{
+                      columns: [
+                        { Header: "Nume", accessor: "name", width: "25%" },
+                        { Header: "Categorie", accessor: "category", width: "15%" },
+                        { Header: "Ordine", accessor: "order", width: "10%" },
+                        { Header: "Activ", accessor: "active", width: "10%" },
+                        { Header: "Pret", accessor: "price", width: "15%" },
+                        { Header: "Action", accessor: "action", align: "center", width: "10%" },
+                      ],
+                      rows: filteredProducts.map((item) =>
+                        productRow(item, handleOpenProductModal, handleOpenProductDeleteModal)
+                      ),
+                    }}
+                  />
+                  {isProductLoading && (
+                    <div style={{ display: "flex", justifyContent: "center", padding: "30px 5px" }}>
+                      <CircularProgress />
+                    </div>
+                  )}
+                </div>
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
-      {isOpen && (
+      {isProductOpen && (
         <ProductModal
-          open={isOpen}
-          handleClose={handleCloseModal}
-          item={item}
+          open={isProductOpen}
+          handleClose={handleCloseProductModal}
+          item={product}
           categories={categories}
         />
       )}
-      {isDeleteOpen && (
-        <DeleteModal open={isDeleteOpen} handleClose={handleCloseModal} item={item} type="item" />
+      {isProductDeleteOpen && (
+        <DeleteModal
+          open={isProductDeleteOpen}
+          handleClose={handleCloseProductModal}
+          item={product}
+          type="item"
+        />
+      )}
+      {isCategoryOpen && (
+        <CategoryModal
+          open={isCategoryOpen}
+          handleClose={handleCloseCategoryModal}
+          category={category}
+        />
+      )}
+      {isCategoryDeleteOpen && (
+        <DeleteModal
+          open={isCategoryDeleteOpen}
+          handleClose={handleCloseCategoryModal}
+          item={category}
+          type="category"
+        />
       )}
       <Footer />
     </DashboardLayout>
   );
 }
 
-function row(item, handleOpenModal, handleDeleteModal) {
+function productRow(item, handleOpenModal, handleDeleteModal) {
   return {
     name: item.name,
     category: item.category.name,
     price: item.price,
+    order: item.order,
     active: item.isAvailable ? (
       <MDBox display="flex" alignItems="center">
         <Icon fontSize="small" color="success">
@@ -234,8 +363,12 @@ function row(item, handleOpenModal, handleDeleteModal) {
       </MDBox>
     ),
     action: (
-      <MDBox>
-        <Button href="#" sx={{ pr: 0 }} width="30%" onClick={() => handleOpenModal(item)}>
+      <MDBox sx={{ maxWidth: "100%", display: "flex", justifyContent: "space-evenly" }}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleOpenModal(item)}
+        >
           <Icon
             sx={{
               fontWeight: "bold",
@@ -245,7 +378,69 @@ function row(item, handleOpenModal, handleDeleteModal) {
             edit
           </Icon>
         </Button>
-        <Button href="#" sx={{ pl: 0 }} onClick={() => handleDeleteModal(item)}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleDeleteModal(item)}
+        >
+          <Icon
+            href="#"
+            sx={{
+              fontWeight: "bold",
+              color: ({ palette: { error } }) => error.main,
+            }}
+          >
+            delete
+          </Icon>
+        </Button>
+      </MDBox>
+    ),
+  };
+}
+
+function categoryRow(category, handleOpenModal, handleDeleteModal, handleCheckboxChange) {
+  return {
+    selected: (
+      <Checkbox
+        defaultChecked={false}
+        onChange={() => handleCheckboxChange(category)}
+        color="primary"
+        inputProps={{ "aria-label": "checkbox" }}
+      />
+    ),
+    name: category.name,
+    totalItems: category.totalItems,
+    order: category.order,
+    isFood: category.isFood ? (
+      <MDBox display="flex" alignItems="center">
+        <RestaurantIcon fontSize="medium" />
+      </MDBox>
+    ) : (
+      <MDBox display="flex" alignItems="center">
+        <LocalBarIcon fontSize="medium" />
+      </MDBox>
+    ),
+    action: (
+      <MDBox sx={{ maxWidth: "100%", display: "flex", justifyContent: "space-evenly" }}>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleOpenModal(category)}
+        >
+          <Icon
+            sx={{
+              fontWeight: "bold",
+              color: ({ palette: { primary } }) => primary.main,
+            }}
+          >
+            edit
+          </Icon>
+        </Button>
+        <Button
+          href="#"
+          sx={{ px: 1, width: "50%", minWidth: "0px" }}
+          onClick={() => handleDeleteModal(category)}
+        >
           <Icon
             href="#"
             sx={{
