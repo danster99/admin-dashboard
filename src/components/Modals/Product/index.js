@@ -36,8 +36,11 @@ export function ProductModal({ open, handleClose, item, categories }) {
   const [category, setCategory] = useState(item ? item.category.name : "");
   const [order, setOrder] = useState(item ? item.order : 0);
   const [alergens, setAlergens] = useState(item ? item.alergens : "");
+  const [aditives, setAditives] = useState(item ? item.aditives : "");
   const [spiceLvl, setSpiceLvl] = useState(item ? item.spiceLvl : 0);
   const [energy, setEnergy] = useState(item ? item.nutriValues["Valoare energetica"] : "");
+  const [weight, setWeight] = useState(item ? item.weight : "");
+  const [ingredients, setIngredients] = useState(item ? item.ingredients : "");
   const [fat, setFat] = useState(item ? item.nutriValues["Grasimi"] : "");
   const [saturatedFat, setSaturatedFat] = useState(
     item ? item.nutriValues["Acizi grasi saturati"] : ""
@@ -62,6 +65,9 @@ export function ProductModal({ open, handleClose, item, categories }) {
     setCategory(item.category.name);
     setOrder(item.order);
     setAlergens(item.alergens);
+    setAditives(item.aditives);
+    setWeight(item.weight);
+    setIngredients(item.ingredients);
     setEnergy(item ? item.nutriValues["Valoare energetica"] : "");
     setFat(item ? item.nutriValues["Grasimi"] : "");
     setSaturatedFat(item ? item.nutriValues["Acizi grasi saturati"] : "");
@@ -82,6 +88,18 @@ export function ProductModal({ open, handleClose, item, categories }) {
 
   const handleAlergensChange = (event) => {
     setAlergens(event.target.value);
+  };
+
+  const handleAditivesChange = (event) => {
+    setAditives(event.target.value);
+  };
+
+  const handleWeightChange = (event) => {
+    setWeight(event.target.value);
+  };
+
+  const handleIngredientsChange = (event) => {
+    setIngredients(event.target.value);
   };
 
   const handleDescriptionChange = (event) => {
@@ -188,6 +206,9 @@ export function ProductModal({ open, handleClose, item, categories }) {
       obj.b2StorageFile = new File([photo], photo.name, { type: photo.type });
     }
     obj.alergens = alergens;
+    obj.aditives = aditives;
+    obj.weight = weight;
+    obj.ingredients = ingredients;
     obj.spiceLvl = spiceLvl / 33;
     let nv = {
       "Valoare energetica": energy,
@@ -287,7 +308,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 onChange={handleDescriptionChange}
                 required
                 multiline
-                rows={10}
+                rows={5}
                 inputProps={{ maxLength: 300 }}
               />
               <TextField
@@ -302,8 +323,8 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 onChange={handlePriceChange}
                 required
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" style={{ width: "30px" }}>
+                  endAdornment: (
+                    <InputAdornment style={{ width: "30px" }}>
                       <p>RON</p>
                     </InputAdornment>
                   ),
@@ -332,7 +353,49 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 required
                 type="number"
               />
-              <p>Spice Level</p>
+              <div
+                style={{
+                  height: "20px",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
+                <FormControlLabel
+                  control={<Checkbox checked={available} onChange={handleAvailable} />}
+                  label="Activ"
+                  labelPlacement="end"
+                  value={available}
+                  onChange={handleAvailable}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={dairy_free} onChange={handleDairyFree} />}
+                  label="DairyFree"
+                  labelPlacement="end"
+                  value={dairy_free}
+                  onChange={handleDairyFree}
+                />
+              </div>
+              <div
+                style={{
+                  height: "20px",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
+                <FormControlLabel
+                  control={<Checkbox checked={gluten_free} onChange={handleGlutenFree} />}
+                  label="GlutenFree"
+                  labelPlacement="end"
+                  value={gluten_free}
+                  onChange={handleGlutenFree}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={vegan} onChange={handleVegan} />}
+                  label="Vegan"
+                  labelPlacement="end"
+                />
+              </div>
+              <p style={{ marginTop: "4%" }}>Spice Level</p>
               <Slider
                 aria-label="Always visible"
                 value={spiceLvl}
@@ -346,88 +409,91 @@ export function ProductModal({ open, handleClose, item, categories }) {
                   { value: 99, label: "3" },
                 ]}
                 valueLabelDisplay="off"
-                style={{ margin: "auto", width: "90%" }}
+                style={{ margin: "auto", width: "95%" }}
               />
             </div>
 
             <div style={formFields}>
               {/* <Collapse in={NutriVal} timeout="auto" unmountOnExit style={formNutriVal}> */}
               <TextField
+                label="Weight"
+                onChange={handleWeightChange}
+                value={weight}
+                required
+                style={{ width: "100%" }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment>
+                      <p>g</p>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                label="Ingredients"
+                value={ingredients}
+                onChange={handleIngredientsChange}
+                required
+                multiline
+                rows={5}
+                inputProps={{ maxLength: 300 }}
+              />
+              <TextField
+                label="Aditives"
+                value={aditives}
+                onChange={handleAditivesChange}
+                required
+              />
+              <TextField
                 label="Valoare energetica"
                 onChange={handleEnergyChange}
                 value={energy}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               <TextField
                 label="Grasimi"
                 onChange={handleFatChange}
                 value={fat}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               <TextField
                 label="Acizi grasi saturati"
                 onChange={handleSaturatedFatChange}
                 value={saturatedFat}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               <TextField
                 label="Glucide"
                 onChange={handleCarbsChange}
                 value={carbs}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               <TextField
                 label="Zaharuri"
                 onChange={handleSugarChange}
                 value={sugar}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               <TextField
                 label="Proteine"
                 onChange={handleProteinChange}
                 value={protein}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               <TextField
                 label="Sare"
                 onChange={handleSaltChange}
                 value={salt}
                 required
-                style={{ width: "100%", marginBottom: "8px" }}
+                style={{ width: "100%" }}
               />
               {/* </Collapse> */}
-              <FormControlLabel
-                control={<Checkbox checked={available} onChange={handleAvailable} />}
-                label="Activ"
-                labelPlacement="end"
-                value={available}
-                onChange={handleAvailable}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={dairy_free} onChange={handleDairyFree} />}
-                label="DairyFree"
-                labelPlacement="end"
-                value={dairy_free}
-                onChange={handleDairyFree}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={gluten_free} onChange={handleGlutenFree} />}
-                label="GlutenFree"
-                labelPlacement="end"
-                value={gluten_free}
-                onChange={handleGlutenFree}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={vegan} onChange={handleVegan} />}
-                label="Vegan"
-                labelPlacement="end"
-              />
             </div>
             <div style={formPhoto}>
               <input
