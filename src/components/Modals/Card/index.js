@@ -131,9 +131,6 @@ export function CardModal({ open, handleClose, card, rows }) {
 
   const handleRedirectChange = (event, newRedirectType) => {
     setRedirectType(newRedirectType);
-    if (newRedirectType === "empty") {
-      setLinksTo("");
-    }
   };
 
   const handleLinksToChange = (event) => {
@@ -151,8 +148,6 @@ export function CardModal({ open, handleClose, card, rows }) {
           else setLinksTo("/drinks/?category=" + category.name);
         }
       });
-    } else if (redirectType === "empty") {
-      setLinksTo(null);
     }
   };
 
@@ -181,7 +176,7 @@ export function CardModal({ open, handleClose, card, rows }) {
     }
     obj.order = order;
     obj.active = active;
-    obj.links_to = links_to;
+    obj.links_to = redirectType == "empty" ? null : links_to;
 
     const formData = new FormData();
     for (const key in obj) {
