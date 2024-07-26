@@ -49,6 +49,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
   const [sugar, setSugar] = useState(item ? item.nutriValues["Zaharuri"] : "");
   const [protein, setProtein] = useState(item ? item.nutriValues["Proteine"] : "");
   const [salt, setSalt] = useState(item ? item.nutriValues["Sare"] : "");
+  const [nutriValuesLink, setNutriValuesLink] = useState(item ? item.nutriValuesLink : "");
   const [available, setAvailable] = useState(item ? item.isAvailable : true);
   const [dairy_free, setDairyFree] = useState(item ? item.isDairyFree : false);
   const [gluten_free, setGlutenFree] = useState(item ? item.isGlutenFree : false);
@@ -75,6 +76,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
     setSugar(item ? item.nutriValues["Zaharuri"] : "");
     setProtein(item ? item.nutriValues["Proteine"] : "");
     setSalt(item ? item.nutriValues["Sare"] : "");
+    setNutriValuesLink(item ? item.nutriValuesLink : "");
     setSpiceLvl(item.spiceLvl * 33);
     setDairyFree(item.isDairyFree);
     setGlutenFree(item.isGlutenFree);
@@ -159,6 +161,10 @@ export function ProductModal({ open, handleClose, item, categories }) {
     setSalt(event.target.value);
   };
 
+  const handleNutriValuesLinkChange = (event) => {
+    setNutriValuesLink(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission logic here
@@ -220,6 +226,7 @@ export function ProductModal({ open, handleClose, item, categories }) {
       Sare: salt,
     };
     obj.nutriValues = JSON.stringify(nv);
+    obj.nutriValuesLink = nutriValuesLink;
     obj.isAvailable = available;
     obj.isDairyFree = dairy_free;
     obj.isGlutenFree = gluten_free;
@@ -442,6 +449,12 @@ export function ProductModal({ open, handleClose, item, categories }) {
                 label="Aditives"
                 value={aditives}
                 onChange={handleAditivesChange}
+                required
+              />
+              <TextField
+                label="Link Valori Nutritionale"
+                value={nutriValuesLink}
+                onChange={handleNutriValuesLinkChange}
                 required
               />
               <TextField
